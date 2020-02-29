@@ -186,8 +186,8 @@ namespace Lab02.ViewModels.ZodiacDeterminant
                 var user = new Person(UserEnteredName, UserEnteredSurname, 
                     UserEnteredEMail, UserEnteredBirthDate);
                 if (user.IsAdult.HasValue)
-                    UserIsAdult = "Is adult: " + user.IsAdult.Value;
-                else UserIsAdult = "Is adult: unknown";
+                    UserIsAdult = "Is Adult: " + user.IsAdult.Value;
+                else UserIsAdult = "Is Adult: unknown";
                 UserWesternZodiac = user.SunSign.HasValue ? 
                     Person.GetDescription(user.SunSign.Value) : "Western Zodiac Sign: unknown";
                 UserChineseZodiac = user.ChineseSign.HasValue ? 
@@ -202,10 +202,12 @@ namespace Lab02.ViewModels.ZodiacDeterminant
                     else UserIsBirthday = "Is Birthday: false";
                 }
                 else UserIsBirthday = "Is Birthday: unknown";
-                UserName = user.Name;
-                UserSurname = user.Surname;
-                UserEMail = user.EMail;
-                UserBirthDate = user.BirthDate.HasValue ? "Birth Date: " + user.BirthDate.Value : "Birth Date: unknown";
+                UserName = $"Name: {user.Name}";
+                UserSurname = $"Surname: {user.Surname}";
+                UserEMail = $"e-mail: {user.EMail}";
+                UserBirthDate = user.BirthDate.HasValue ? 
+                    $"Birth Date: {user.BirthDate.Value.Day}.{user.BirthDate.Value.Month}.{user.BirthDate.Value.Year}": 
+                    "Birth Date: unknown";
             }
             catch (ArgumentException e)
             {
@@ -215,6 +217,11 @@ namespace Lab02.ViewModels.ZodiacDeterminant
 
         private async void ShowDateInfoImplementation(object obj)
         {
+            UserName = string.Empty;
+            UserSurname = string.Empty;
+            UserEMail = string.Empty;
+            UserBirthDate = string.Empty;
+            UserIsBirthday = string.Empty;
             UserIsAdult = string.Empty;
             UserWesternZodiac = string.Empty;
             UserChineseZodiac = string.Empty;

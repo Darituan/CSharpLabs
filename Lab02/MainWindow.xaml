@@ -6,7 +6,7 @@
         xmlns:views="clr-namespace:Lab02.Views"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="600">
     <Grid IsEnabled="{Binding IsControlEnabled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
         <views:ZodiacDeterminantView></views:ZodiacDeterminantView>
         <fa:ImageAwesome Icon="Refresh" Width="50" Height="50" Spin="True" Visibility="{Binding LoaderVisibility, 

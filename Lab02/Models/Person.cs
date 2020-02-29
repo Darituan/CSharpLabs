@@ -10,7 +10,7 @@ namespace Lab02.Models
     internal class Person
     {
         // each month has two western zodiac signs in it
-        // this array represents the last days of the first zodiac sign of each month
+        // this enum represents the last days of the first zodiac sign of each month
         private enum MonthDividingDays
         {
             Jan = 20,

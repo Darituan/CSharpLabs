@@ -7,85 +7,86 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"></RowDefinition>
-            <RowDefinition Height="17"></RowDefinition>
-            <RowDefinition Height="30"></RowDefinition>
-            <RowDefinition Height="17"></RowDefinition>
-            <RowDefinition Height="30"></RowDefinition>
-            <RowDefinition Height="17"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*" MinWidth="190"></ColumnDefinition>
+            <ColumnDefinition Width="*" MinWidth="190"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Label Grid.Row="0" Grid.Column="1" FontSize="14" Content="Name:"></Label>
-        <TextBox Grid.Row ="1" Grid.Column="1" Height="15"
+        <Label Grid.Row="0" Grid.Column="0" FontSize="14" Content="Name:" HorizontalAlignment="center"></Label>
+        <TextBox Grid.Row ="1" Grid.Column="0" Height="18" Width="185" HorizontalAlignment="center"
                  Text="{Binding UserEnteredName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <Label Grid.Row="2" Grid.Column="1" FontSize="14" Content="Surname:"></Label>
-        <TextBox Grid.Row ="3" Grid.Column="1" Height="15"
+        <Label Grid.Row="2" Grid.Column="0" FontSize="14" Content="Surname:" HorizontalAlignment="center"></Label>
+        <TextBox Grid.Row ="3" Grid.Column="0" Height="18" Width="185" HorizontalAlignment="center"
                  Text="{Binding UserEnteredSurname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <Label Grid.Row="4" Grid.Column="1" FontSize="14" Content="e-mail:"></Label>
-        <TextBox Grid.Row ="5" Grid.Column="1" Height="15"
+        <Label Grid.Row="4" Grid.Column="0" FontSize="14" Content="e-mail:" HorizontalAlignment="center"></Label>
+        <TextBox Grid.Row ="5" Grid.Column="0" Height="18" Width="185" HorizontalAlignment="center"
                  Text="{Binding UserEnteredEMail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <Label Grid.Row="6" Grid.Column="1" FontSize="14" Content="Birth date:" HorizontalAlignment="Center"></Label>
+        <Label Grid.Row="6" Grid.Column="0" FontSize="14" Content="Birth date:" HorizontalAlignment="Center"></Label>
         <DatePicker Margin="10" Width="185" Height="190" 
-                    VerticalAlignment="Top" Grid.Row="7" Grid.Column="1"
+                    VerticalAlignment="Top" Grid.Row="7" Grid.Column="0"
                     SelectedDate="{Binding Path=UserEnteredBirthDate, Mode=TwoWay}">
         </DatePicker>
-        <Button Grid.Row="8" Grid.Column="1"
+        <Button Grid.Row="8" Grid.Column="0"
                 HorizontalAlignment="Center"
                 Height="30"
                 Margin="5"
                 Content="Proceed"
                 Command ="{Binding ShowDateInfoCommand}"
         ></Button>
-        <TextBlock Grid.Row="0" Grid.Column="0"
+        <TextBlock Grid.Row="0" Grid.Column="1" FontSize="14"
                    HorizontalAlignment="Center"
                    Height="30"
                    Margin="5"
                    Text="{Binding UserName}"
         ></TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="0"
+        <TextBlock Grid.Row="1" Grid.Column="1" FontSize="14"
                    HorizontalAlignment="Center"
                    Height="30"
                    Margin="5"
                    Text="{Binding UserSurname}"
         ></TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="0"
+        <TextBlock Grid.Row="2" Grid.Column="1" FontSize="14"
                    HorizontalAlignment="Center"
                    Height="30"
                    Margin="5"
                    Text="{Binding UserEMail}"
         ></TextBlock>
-        <TextBlock Grid.Row="3" Grid.Column="0"
+        <TextBlock Grid.Row="3" Grid.Column="1" FontSize="14"
                    HorizontalAlignment="Center"
                    Height="30"
                    Margin="5"
                    Text="{Binding UserBirthDate}"
         ></TextBlock>
-        <TextBlock Grid.Row="4" Grid.Column="0"
+        <TextBlock Grid.Row="4" Grid.Column="1" FontSize="14"
                    HorizontalAlignment="Center"
                    Height="30"
                    Margin="5"
                    Text="{Binding UserIsAdult}"
         ></TextBlock>
-        <TextBlock Grid.Row="5" Grid.Column="0"
+        <TextBlock Grid.Row="5" Grid.Column="1" FontSize="14"
                    HorizontalAlignment="Center"
                    Height="30"
                    Margin="5"
                    Text="{Binding UserIsBirthday}"
         ></TextBlock>
-        <TextBlock Grid.Row="6" Grid.Column="0"
+        <TextBlock Grid.Row="6" Grid.Column="1" FontSize="14"
                    HorizontalAlignment="Center"
                    Height="30"
                    Margin="5"
                    Text="{Binding UserWesternZodiac}"
         ></TextBlock>
-        <TextBlock Grid.Row="7" Grid.Column="0"
+        <TextBlock Grid.Row="7" Grid.Column="1" FontSize="14"
                    HorizontalAlignment="Center"
+                   VerticalAlignment="Top"
                    Height="30"
                    Margin="5"
                    Text="{Binding UserChineseZodiac}"
