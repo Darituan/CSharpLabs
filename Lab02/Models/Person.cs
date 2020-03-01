@@ -9,79 +9,6 @@ namespace Lab02.Models
 {
     internal class Person
     {
-        // each month has two western zodiac signs in it
-        // this enum represents the last days of the first zodiac sign of each month
-        private enum MonthDividingDays
-        {
-            Jan = 20,
-            Feb = 18,
-            Mar = 20,
-            Apr = 20,
-            May = 20,
-            Jun = 21,
-            Jul = 22,
-            Aug = 23,
-            Sep = 23,
-            Oct = 23,
-            Nov = 22,
-            Dec = 21
-        }
-
-        internal enum SunSigns
-        {
-            [Description("Western Zodiac Sign: Capricorn")]
-            Capricorn,
-            [Description("Western Zodiac Sign: Aquarius")]
-            Aquarius,
-            [Description("Western Zodiac Sign: Pisces")]
-            Pisces,
-            [Description("Western Zodiac Sign: Aries")]
-            Aries,
-            [Description("Western Zodiac Sign: Taurus")]
-            Taurus,
-            [Description("Western Zodiac Sign: Gemini")]
-            Gemini,
-            [Description("Western Zodiac Sign: Cancer")]
-            Cancer,
-            [Description("Western Zodiac Sign: Leo")]
-            Leo,
-            [Description("Western Zodiac Sign: Virgo")]
-            Virgo,
-            [Description("Western Zodiac Sign: Libra")]
-            Libra,
-            [Description("Western Zodiac Sign: Scorpio")]
-            Scorpio,
-            [Description("Western Zodiac Sign: Sagittarius")]
-            Sagittarius
-        }
-        
-        internal enum ChineseSigns
-        {
-            [Description("Chinese Zodiac Sign: Tiger")]
-            Tiger,
-            [Description("Chinese Zodiac Sign: Rabbit")]
-            Rabbit,
-            [Description("Chinese Zodiac Sign: Dragon")]
-            Dragon,
-            [Description("Chinese Zodiac Sign: Snake")]
-            Snake,
-            [Description("Chinese Zodiac Sign: Horse")]
-            Horse,
-            [Description("Chinese Zodiac Sign: Goat")]
-            Goat,
-            [Description("Chinese Zodiac Sign: Monkey")]
-            Monkey,
-            [Description("Chinese Zodiac Sign: Rooster")]
-            Rooster,
-            [Description("Chinese Zodiac Sign: Dog")]
-            Dog,
-            [Description("Chinese Zodiac Sign: Pig")]
-            Pig,
-            [Description("Chinese Zodiac Sign: Rat")]
-            Rat,
-            [Description("Chinese Zodiac Sign: Ox")]
-            Ox
-        }
         
         #region Fields
         // the first year all dates of which work correctly in ChineseLunisolarCalendar
@@ -99,14 +26,14 @@ namespace Lab02.Models
 
         #region Properties
         
-        internal string Name { get; set; }
+        internal string Name { get; private set; }
         
-        internal string Surname { get; set; }
+        internal string Surname { get; private set; }
 
         internal string EMail
         {
             get => _eMail;
-            set
+            private set
             {
                 if (value != null)
                 {
@@ -121,7 +48,7 @@ namespace Lab02.Models
         internal DateTime? BirthDate
         {
             get => _birthDate;
-            set
+            private set
             {
                 if (value.HasValue)
                     CheckAge(value.Value);
@@ -134,30 +61,51 @@ namespace Lab02.Models
 
         internal ChineseSigns? ChineseSign => _chineseSign;
 
-        internal bool? IsAdult
-        {
-            get
-            {
-                if (_birthDate.HasValue)
-                    return AgeInYears(_birthDate.Value) >= 18;
-                return null;
-            }
-        }
+        internal bool? IsAdult => CheckIfAdult();
 
-        internal bool? IsBirthday
-        {
-            get
-            {
-                if (_birthDate.HasValue)
-                    return _birthDate.Value.Month == DateTime.Today.Month &&
-                          _birthDate.Value.Day == DateTime.Today.Day;
-                return null;
-            }
-        }
+        internal bool? IsBirthday => CheckIfBirthday();
 
         #endregion
 
-        private static int AgeInYears(DateTime birthDate)
+        // each month has two western zodiac signs in it
+        // this method returns the last day of the first zodiac sign of month passed to it
+        private int GetDividingDay(int monthNumber)
+        {
+            return monthNumber switch
+            {
+                0 => 20,
+                1 => 18,
+                2 => 20,
+                3 => 20,
+                4 => 20,
+                5 => 21,
+                6 => 22,
+                7 => 23,
+                8 => 23,
+                9 => 23,
+                10 => 22,
+                11 => 21,
+                _ => throw new ArgumentOutOfRangeException(nameof(monthNumber),
+                    "Month number must be in range [0, 12)")
+            };
+        }
+        
+        private bool? CheckIfAdult()
+        {
+            if (_birthDate.HasValue)
+                return CountAge(_birthDate.Value) >= 18;
+            return null;
+        }
+        
+        private bool? CheckIfBirthday()
+        {
+            if (_birthDate.HasValue)
+                return _birthDate.Value.Month == DateTime.Today.Month &&
+                       _birthDate.Value.Day == DateTime.Today.Day;
+            return null;
+        }
+        
+        private static int CountAge(DateTime birthDate)
         {
             var today = DateTime.Today;
             var years = today.Year - birthDate.Year;
@@ -174,7 +122,7 @@ namespace Lab02.Models
         {
             if (!_birthDate.HasValue) return null;
             var index = _birthDate.Value.Month - 1;
-            if (_birthDate.Value.Day > (int)Enum.GetValues(typeof(MonthDividingDays)).GetValue(index))
+            if (_birthDate.Value.Day > GetDividingDay(index))
                 index = (index + 1) % 12;
             return (SunSigns)Enum.GetValues(typeof(SunSigns)).GetValue(index);
         }
@@ -195,9 +143,9 @@ namespace Lab02.Models
             _chineseSign = DetermineChineseZodiac();
         }
 
-        private void CheckAge(DateTime birthDate)
+        private static void CheckAge(DateTime birthDate)
         {
-            var age = AgeInYears(birthDate);
+            var age = CountAge(birthDate);
             if (age >= 0 && age <= 135) return;
             var message = string.Concat("It seems like You were either born more", 
                 " than 135 years ago or in future.", " If this is not a mistake, we are sorry to tell", 
@@ -208,16 +156,10 @@ namespace Lab02.Models
         
         internal static string GetDescription<T>(T genericEnum) where T: Enum
         {
-            MemberInfo[] memberInfo = typeof(T).GetMember(genericEnum.ToString());
-            if (memberInfo.Length > 0)
-            {
-                var attribs = memberInfo[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
-                if (attribs.Any())
-                {
-                    return ((DescriptionAttribute)attribs.ElementAt(0)).Description;
-                }
-            }
-            return genericEnum.ToString();
+            var memberInfo = typeof(T).GetMember(genericEnum.ToString());
+            if (memberInfo.Length <= 0) return genericEnum.ToString();
+            var attribs = memberInfo[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
+            return attribs.Any() ? ((DescriptionAttribute)attribs.ElementAt(0)).Description : genericEnum.ToString();
         }
 
         internal Person(string name, string surname, string email, DateTime? birthDate)
