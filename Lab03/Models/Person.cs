@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
+using Lab03.Exceptions;
 using System.Text.RegularExpressions;
 
 namespace Lab03.Models
@@ -38,8 +38,7 @@ namespace Lab03.Models
                 if (value != null)
                 {
                     if (! EmailRegex.IsMatch(value))
-                        throw new ArgumentException(
-                            "Oops! It seems like there is a mistake in Your e-mail address");
+                        throw new InvalidEmailException();
                 }
                 _eMail = value;
             }
@@ -146,12 +145,8 @@ namespace Lab03.Models
         private static void CheckAge(DateTime birthDate)
         {
             var age = CountAge(birthDate);
-            if (age >= 0 && age <= 135) return;
-            var message = string.Concat("It seems like You were either born more", 
-                " than 135 years ago or in future.", " If this is not a mistake, we are sorry to tell", 
-                " this app is probably not designed for You :(");
-            Console.WriteLine(message);
-            throw new ArgumentException(message);
+            if (age > 135) throw new BornInDistantPastException();
+            if (age < 0) throw new BornInFutureException();
         }
         
         internal static string GetDescription<T>(T genericEnum) where T: Enum
