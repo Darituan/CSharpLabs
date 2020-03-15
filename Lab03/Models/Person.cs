@@ -16,8 +16,7 @@ namespace Lab03.Models
         private static readonly ChineseLunisolarCalendar ChineseCalendar = new ChineseLunisolarCalendar();
         private static readonly Regex EmailRegex = 
             new Regex(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$");
-        private static readonly Regex NameRegex = new Regex(@"\w+([-' ]\w+)*");
-        private static readonly Regex NoNumbersRegex = new Regex(@"\D+");
+        private static readonly Regex NameRegex = new Regex(@"^\w+([-' ]\w+)*$");
         private string _name;
         private string _surname;
         private string _eMail;
@@ -36,7 +35,7 @@ namespace Lab03.Models
             {
                 if (value != null)
                 {
-                    if (! NameRegex.IsMatch(value) || ! NoNumbersRegex.IsMatch(value))
+                    if (! NameRegex.IsMatch(value))
                         throw new InvalidNameException();
                 }
                 _name = value;
@@ -50,7 +49,7 @@ namespace Lab03.Models
             {
                 if (value != null)
                 {
-                    if (! NameRegex.IsMatch(value) || ! NoNumbersRegex.IsMatch(value))
+                    if (! NameRegex.IsMatch(value))
                         throw new InvalidSurnameException();
                 }
                 _surname = value;
