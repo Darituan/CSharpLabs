@@ -15,8 +15,11 @@ namespace Lab03.Models
         private static readonly int AnchorYear = 1902;
         private static readonly ChineseLunisolarCalendar ChineseCalendar = new ChineseLunisolarCalendar();
         private static readonly Regex EmailRegex = 
-            new Regex("^\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$");
-
+            new Regex(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$");
+        private static readonly Regex NameRegex = new Regex(@"\w+([-' ]\w+)*");
+        private static readonly Regex NoNumbersRegex = new Regex(@"\D+");
+        private string _name;
+        private string _surname;
         private string _eMail;
         private DateTime? _birthDate;
         private SunSigns? _sunSign;
@@ -25,10 +28,34 @@ namespace Lab03.Models
         #endregion
 
         #region Properties
+
+        internal string Name
+        {
+            get => _name;
+            private set
+            {
+                if (value != null)
+                {
+                    if (! NameRegex.IsMatch(value) || ! NoNumbersRegex.IsMatch(value))
+                        throw new InvalidNameException();
+                }
+                _name = value;
+            }
+        }
         
-        internal string Name { get; private set; }
-        
-        internal string Surname { get; private set; }
+        internal string Surname
+        {
+            get => _surname;
+            private set
+            {
+                if (value != null)
+                {
+                    if (! NameRegex.IsMatch(value) || ! NoNumbersRegex.IsMatch(value))
+                        throw new InvalidSurnameException();
+                }
+                _surname = value;
+            }
+        }
 
         internal string EMail
         {
