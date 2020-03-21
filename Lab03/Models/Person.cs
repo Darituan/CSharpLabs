@@ -191,20 +191,12 @@ namespace Lab03.Models
             BirthDate = birthDate;
         }
         
-        internal Person(string name, string surname, string email)
-        {
-            Name = name;
-            Surname = surname;
-            EMail = email;
-            BirthDate = null;
-        }
+        internal Person(string name, string surname, string email):
+            this(name, surname, email, null)
+        { }
         
-        internal Person(string name, string surname, DateTime? birthDate)
-        {
-            Name = name;
-            Surname = surname;
-            EMail = null;
-            BirthDate = birthDate;
-        }
+        internal Person(string name, string surname, DateTime? birthDate):
+            this(name, surname, null, birthDate)
+        { }
     }
 }
