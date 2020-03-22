@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace Lab04.Models
 {
+    [Serializable]
     internal class Person
     {
         
