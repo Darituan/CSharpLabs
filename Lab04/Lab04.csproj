@@ -6,4 +6,10 @@
         <UseWPF>true</UseWPF>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Reference Include="FontAwesome.WPF, Version=4.7.0.37774, Culture=neutral, PublicKeyToken=0758b07a11a4f466">
+        <HintPath>C:\Users\Darituan\.nuget\packages\fontawesome.wpf\4.7.0.9\lib\net40\FontAwesome.WPF.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>

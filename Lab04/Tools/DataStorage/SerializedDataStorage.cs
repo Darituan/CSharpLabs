@@ -10,7 +10,6 @@ namespace Lab04.Tools.DataStorage
     internal class SerializedDataStorage
     {
         private static readonly string[] Names = {"Dan", "Alex", "Kate", "Mike", "Julia", "Sophie", "John", "Ann"};
-        // TODO: normal surnames and emails
         private static readonly string[] Surnames = {"Darituan", "Surname", "Sad", "Star", 
             "Roberts", "Xeno", "Wick", "Hinkul"};
         private static readonly string[] EMails = {"dar", "aaa", "aba", "star", "fff", "hex", "wick", "ah"};
@@ -44,7 +43,7 @@ namespace Lab04.Tools.DataStorage
                 var surname = Surnames[Rand.Next(Surnames.Length)];
                 var eMail = $"{EMails[Rand.Next(EMails.Length)]}@gmail.com";
                 var birthDate = new DateTime(Rand.Next(minYear, currentYear), 
-                    Rand.Next(12), Rand.Next(1, 28));
+                    Rand.Next(1, 13), Rand.Next(1, 29));
                 users.Add(new Person(name, surname, eMail, birthDate));
             }
             SerializationManager.Serialize(users, FileFolderHelper.StorageFilePath);

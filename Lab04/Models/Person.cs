@@ -31,7 +31,7 @@ namespace Lab04.Models
 
         #region Properties
 
-        internal string Name
+        public string Name
         {
             get => _name;
             private set
@@ -45,7 +45,7 @@ namespace Lab04.Models
             }
         }
         
-        internal string Surname
+        public string Surname
         {
             get => _surname;
             private set
@@ -59,7 +59,7 @@ namespace Lab04.Models
             }
         }
 
-        internal string EMail
+        public string EMail
         {
             get => _eMail;
             private set
@@ -69,7 +69,7 @@ namespace Lab04.Models
             }
         }
 
-        internal DateTime? BirthDate
+        public DateTime? BirthDate
         {
             get => _birthDate;
             private set
@@ -80,13 +80,13 @@ namespace Lab04.Models
             }
         }
 
-        internal SunSigns? SunSign => _sunSign;
+        public SunSigns? SunSign => _sunSign;
 
-        internal ChineseSigns? ChineseSign => _chineseSign;
+        public ChineseSigns? ChineseSign => _chineseSign;
 
-        internal bool? IsAdult => _isAdult;
+        public bool? IsAdult => _isAdult;
 
-        internal bool? IsBirthday => _isBirthday;
+        public bool? IsBirthday => _isBirthday;
 
         #endregion
 
