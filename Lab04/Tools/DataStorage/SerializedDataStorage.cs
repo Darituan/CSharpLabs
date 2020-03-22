@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
@@ -14,27 +15,45 @@ namespace Lab04.Tools.DataStorage
             "Roberts", "Xeno", "Wick", "Hinkul"};
         private static readonly string[] EMails = {"dar", "aaa", "aba", "star", "fff", "hex", "wick", "ah"};
         private static readonly Random Rand = new Random();
-        private readonly ObservableCollection<Person> _users;
+        private readonly List<Person> _users;
 
-        internal ObservableCollection<Person> Users => _users;
+        internal List<Person> Users => _users;
 
         internal SerializedDataStorage()
         {
             try
             {
                 _users = 
-                    SerializationManager.Deserialize<ObservableCollection<Person>>(FileFolderHelper.StorageFilePath);
-                _users.CollectionChanged += Users_CollectionChanged;
+                    SerializationManager.Deserialize<List<Person>>(FileFolderHelper.StorageFilePath);
             }
             catch (FileNotFoundException)
             {
                 _users = CreateDefaultUsers();
             }
         }
-        
-        private static ObservableCollection<Person> CreateDefaultUsers()
+
+        internal void AddUser(Person user)
         {
-            var users = new ObservableCollection<Person>();
+            _users.Add(user);
+            SaveChanges();
+        }
+        
+        internal void EditUser(Person user)
+        {
+            _users.Remove(user);
+            _users.Add(user);
+            SaveChanges();
+        }
+        
+        internal void DeleteUser(Person user)
+        {
+            _users.Remove(user);
+            SaveChanges();
+        }
+        
+        private static List<Person> CreateDefaultUsers()
+        {
+            var users = new List<Person>();
             var currentYear = DateTime.Now.Year;
             var minYear = currentYear - 135;
             for (var i = 0; i < 50; ++i)
@@ -53,11 +72,6 @@ namespace Lab04.Tools.DataStorage
         private void SaveChanges()
         {
             SerializationManager.Serialize(_users, FileFolderHelper.StorageFilePath);
-        }
-
-        private void Users_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            SaveChanges();
         }
     }
 }

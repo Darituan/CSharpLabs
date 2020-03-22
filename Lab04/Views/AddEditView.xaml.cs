@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using Lab04.Tools.Navigation;
+using Lab04.ViewModels;
 
 namespace Lab04.Views
 {
@@ -8,6 +9,7 @@ namespace Lab04.Views
         public AddEditView()
         {
             InitializeComponent();
+            DataContext = new AddEditViewModel();
         }
     }
 }

@@ -14,12 +14,14 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <DataGrid Grid.Row="0" Grid.Column="0" Grid.RowSpan="6"
+        <DataGrid Grid.Row="0" Grid.Column="0" Grid.RowSpan="7"
                   ScrollViewer.CanContentScroll="True"
                   ItemsSource="{Binding Users, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                   SelectedItem="{Binding CurrentUser, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
@@ -37,5 +39,8 @@
                 <DataGridCheckBoxColumn Header="Birthday Today" Binding="{Binding IsBirthday, Mode=OneWay}" />
             </DataGrid.Columns>
         </DataGrid>
+        <Button Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2">Add User</Button>
+        <Button Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2">Edit User</Button>
+        <Button Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Command="{Binding DeletePersonCommand}">Delete User</Button>
     </Grid>
 </UserControl>
