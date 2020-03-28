@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Lab04.Models;
 using Lab04.Tools;
 using Lab04.Tools.Managers;
+using Lab04.Tools.Navigation;
+using Lab04.Tools.SortAndFilter;
 
 namespace Lab04.ViewModels
 {
@@ -15,7 +17,7 @@ namespace Lab04.ViewModels
         private RelayCommand<object> _addPersonCommand;
         private RelayCommand<object> _editPersonCommand;
         private RelayCommand<object> _deletePersonCommand;
-        
+
         public ObservableCollection<Person> Users
         {
             get => _users;
@@ -40,6 +42,24 @@ namespace Lab04.ViewModels
                     DeletePerson, o => CanDeletePerson());
             }
         }
+        
+        public RelayCommand<object> AddPersonCommand
+        {
+            get
+            {
+                return _addPersonCommand ??= new RelayCommand<object>(
+                    AddPerson, o => CanAddPerson());
+            }
+        }
+        
+        public RelayCommand<object> EditPersonCommand
+        {
+            get
+            {
+                return _editPersonCommand ??= new RelayCommand<object>(
+                    EditPerson, o => CanEditPerson());
+            }
+        }
 
 
         private bool CanAddPerson()
@@ -60,14 +80,25 @@ namespace Lab04.ViewModels
 
         private void DeletePerson(object obj)
         {
-            StationManager.DataStorage.DeleteUser(CurrentUser);
+            StationManager.DataStorage.Users.Remove(CurrentUser);
             Users.Remove(CurrentUser);
             CurrentUser = null;
         }
 
+        private void AddPerson(object obj)
+        {
+            StationManager.CurrentUser = null;
+            NavigationManager.Instance.Navigate(ViewType.Add);
+        }
+        
+        private void EditPerson(object obj)
+        {
+            NavigationManager.Instance.Navigate(ViewType.Edit);
+        }
+
         public MainViewModel()
         {
-            _users = new ObservableCollection<Person>(StationManager.DataStorage.Users);
+            _users = StationManager.DataStorage.Users;
         }
         
     }

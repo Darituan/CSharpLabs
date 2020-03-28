@@ -3,12 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:Lab04.Views"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -31,66 +29,24 @@
         <Label Grid.Row="4" Grid.Column="0" FontSize="14" Content="e-mail:" HorizontalAlignment="center"></Label>
         <TextBox Grid.Row ="5" Grid.Column="0" Height="18" Width="185" HorizontalAlignment="center"
                  Text="{Binding UserEnteredEMail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <Label Grid.Row="6" Grid.Column="0" FontSize="14" Content="Birth date:" HorizontalAlignment="Center"></Label>
+        <Label Grid.Row="0" Grid.Column="1" FontSize="14" Content="Birth date:" HorizontalAlignment="Center"></Label>
         <DatePicker Margin="10" Width="185" Height="190" 
-                    VerticalAlignment="Top" Grid.Row="7" Grid.Column="0"
+                    VerticalAlignment="Top" Grid.Row="1" Grid.RowSpan="6" Grid.Column="1"
                     SelectedDate="{Binding Path=UserEnteredBirthDate, Mode=TwoWay}">
         </DatePicker>
-        <Button Grid.Row="8" Grid.Column="0"
+        <Button Grid.Row="7" Grid.Column="0" 
                 HorizontalAlignment="Center"
                 Height="30"
                 Margin="5"
-                Content="Proceed"
-                Command ="{Binding ShowDateInfoCommand}"
+                Content="{Binding ModeName}"
+                Command ="{Binding AddEditCommand}"
         ></Button>
-        <TextBlock Grid.Row="0" Grid.Column="1" FontSize="14"
-                   HorizontalAlignment="Center"
-                   Height="30"
-                   Margin="5"
-                   Text="{Binding UserName}"
-        ></TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="1" FontSize="14"
-                   HorizontalAlignment="Center"
-                   Height="30"
-                   Margin="5"
-                   Text="{Binding UserSurname}"
-        ></TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="1" FontSize="14"
-                   HorizontalAlignment="Center"
-                   Height="30"
-                   Margin="5"
-                   Text="{Binding UserEMail}"
-        ></TextBlock>
-        <TextBlock Grid.Row="3" Grid.Column="1" FontSize="14"
-                   HorizontalAlignment="Center"
-                   Height="30"
-                   Margin="5"
-                   Text="{Binding UserBirthDate}"
-        ></TextBlock>
-        <TextBlock Grid.Row="4" Grid.Column="1" FontSize="14"
-                   HorizontalAlignment="Center"
-                   Height="30"
-                   Margin="5"
-                   Text="{Binding UserIsAdult}"
-        ></TextBlock>
-        <TextBlock Grid.Row="5" Grid.Column="1" FontSize="14"
-                   HorizontalAlignment="Center"
-                   Height="30"
-                   Margin="5"
-                   Text="{Binding UserIsBirthday}"
-        ></TextBlock>
-        <TextBlock Grid.Row="6" Grid.Column="1" FontSize="14"
-                   HorizontalAlignment="Center"
-                   Height="30"
-                   Margin="5"
-                   Text="{Binding UserWesternZodiac}"
-        ></TextBlock>
-        <TextBlock Grid.Row="7" Grid.Column="1" FontSize="14"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Top"
-                   Height="30"
-                   Margin="5"
-                   Text="{Binding UserChineseZodiac}"
-        ></TextBlock>
+        <Button Grid.Row="7" Grid.Column="1" 
+                HorizontalAlignment="Center"
+                Height="30"
+                Margin="5"
+                Content="Return"
+                Command ="{Binding ReturnCommand}"
+        ></Button>
     </Grid>
 </UserControl>

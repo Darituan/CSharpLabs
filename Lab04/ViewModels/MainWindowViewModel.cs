@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 using Lab04.Tools;
 using Lab04.Tools.DataStorage;
 using Lab04.Tools.Managers;
@@ -12,6 +15,7 @@ namespace Lab04.ViewModels
         private Visibility _loaderVisibility = Visibility.Hidden;
         private bool _isControlEnabled = true;
         private INavigatable _content;
+        private RelayCommand<object> _closeCommand;
         #endregion
 
         #region Properties
@@ -42,7 +46,30 @@ namespace Lab04.ViewModels
                 OnPropertyChanged();
             }
         } 
+        
+        public RelayCommand<object> CloseCommand
+        {
+            get
+            {
+                return _closeCommand ??= new RelayCommand<object>(
+                    CloseImplementation, o => CanClose());
+            }
+        }
         #endregion
+
+        private bool CanClose() => true;
+
+        private void Close()
+        {
+            StationManager.DataStorage.SaveChanges();
+        }
+        
+        private async void CloseImplementation(object obj)
+        {
+            LoaderManager.Instance.ShowLoader();
+            await Task.Run(Close);
+            LoaderManager.Instance.HideLoader();
+        }
 
         internal MainWindowViewModel()
         {

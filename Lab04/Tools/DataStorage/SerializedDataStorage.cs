@@ -15,16 +15,16 @@ namespace Lab04.Tools.DataStorage
             "Roberts", "Xeno", "Wick", "Hinkul"};
         private static readonly string[] EMails = {"dar", "aaa", "aba", "star", "fff", "hex", "wick", "ah"};
         private static readonly Random Rand = new Random();
-        private readonly List<Person> _users;
+        private readonly ObservableCollection<Person> _users;
 
-        internal List<Person> Users => _users;
+        internal ObservableCollection<Person> Users => _users;
 
         internal SerializedDataStorage()
         {
             try
             {
                 _users = 
-                    SerializationManager.Deserialize<List<Person>>(FileFolderHelper.StorageFilePath);
+                    SerializationManager.Deserialize<ObservableCollection<Person>>(FileFolderHelper.StorageFilePath);
             }
             catch (FileNotFoundException)
             {
@@ -51,9 +51,9 @@ namespace Lab04.Tools.DataStorage
             SaveChanges();
         }
         
-        private static List<Person> CreateDefaultUsers()
+        private static ObservableCollection<Person> CreateDefaultUsers()
         {
-            var users = new List<Person>();
+            var users = new ObservableCollection<Person>();
             var currentYear = DateTime.Now.Year;
             var minYear = currentYear - 135;
             for (var i = 0; i < 50; ++i)
@@ -69,7 +69,7 @@ namespace Lab04.Tools.DataStorage
             return users;
         }
         
-        private void SaveChanges()
+        internal void SaveChanges()
         {
             SerializationManager.Serialize(_users, FileFolderHelper.StorageFilePath);
         }

@@ -33,5 +33,7 @@ namespace Lab04.Tools.SortAndFilter
         {
             return (lhs, rhs) => lhs.Equals(rhs);
         }
+        
+        
     }
 }

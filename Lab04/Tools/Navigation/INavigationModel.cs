@@ -2,8 +2,9 @@
 {
     internal enum ViewType
     {
-        AddEdit = 0,
-        Main = 1,
+        Add = 0,
+        Edit = 1,
+        Main = 2,
     }
 
     interface INavigationModel

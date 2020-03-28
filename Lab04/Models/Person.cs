@@ -22,7 +22,7 @@ namespace Lab04.Models
         private string _surname;
         private string _eMail;
         private bool? _isAdult;
-        private bool? _isBirthday;
+        private bool? _hasBirthdayToday;
         private DateTime? _birthDate;
         private SunSigns? _sunSign;
         private ChineseSigns? _chineseSign;
@@ -34,7 +34,7 @@ namespace Lab04.Models
         public string Name
         {
             get => _name;
-            private set
+            set
             {
                 if (value != null)
                 {
@@ -48,7 +48,7 @@ namespace Lab04.Models
         public string Surname
         {
             get => _surname;
-            private set
+            set
             {
                 if (value != null)
                 {
@@ -62,7 +62,7 @@ namespace Lab04.Models
         public string EMail
         {
             get => _eMail;
-            private set
+            set
             {
                 CheckEMail(value);
                 _eMail = value;
@@ -72,7 +72,7 @@ namespace Lab04.Models
         public DateTime? BirthDate
         {
             get => _birthDate;
-            private set
+            set
             {
                 CheckBirthDate(value);
                 _birthDate = value;
@@ -86,7 +86,7 @@ namespace Lab04.Models
 
         public bool? IsAdult => _isAdult;
 
-        public bool? IsBirthday => _isBirthday;
+        public bool? HasBirthdayToday => _hasBirthdayToday;
 
         #endregion
 
@@ -185,7 +185,7 @@ namespace Lab04.Models
         internal void UpdateAgeProperties()
         {
             _isAdult = CheckIfAdult();
-            _isBirthday = CheckIfBirthday();
+            _hasBirthdayToday = CheckIfBirthday();
         }
 
         private static void CheckAge(DateTime birthDate)

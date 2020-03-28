@@ -5,29 +5,24 @@ using System.Windows;
 using Lab04.Models;
 using Lab04.Tools;
 using Lab04.Tools.Managers;
+using Lab04.Tools.Navigation;
 
 namespace Lab04.ViewModels
 {
-    internal class AddEditViewModel: BaseViewModel
+    public class AddEditViewModel: BaseViewModel
     {
         #region Fields
         private DateTime? _userEnteredBirthDate ;
         private string _userEnteredName;
         private string _userEnteredSurname;
         private string _userEnteredEMail;
-
-        private string _userName;
-        private string _userSurname;
-        private string _userEMail;
-        private string _userBirthDate;
-        private string _userIsAdult;
-        private string _userIsBirthday;
-        private string _userWesternZodiac;
-        private string _userChineseZodiac;
+        private readonly bool _add;
+        private string _modeName;
+        
 
         #region Commands
-        private RelayCommand<object> _applyChangesCommand;
-        private RelayCommand<object> _closeCommand;
+        private RelayCommand<object> _addEditCommand;
+        private RelayCommand<object> _returnCommand;
         #endregion
         #endregion
 
@@ -72,161 +67,95 @@ namespace Lab04.ViewModels
                 OnPropertyChanged();
             }
         }
-        
-        
-        public string UserName
-        {
-            get => _userName;
-            set
-            {
-                _userName = value;
-                OnPropertyChanged();
-            }
-        }
 
-        public string UserSurname
-        {
-            get => _userSurname;
-            set
-            {
-                _userSurname = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string UserEMail
-        {
-            get => _userEMail;
-            set
-            {
-                _userEMail = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string UserBirthDate
-        {
-            get => _userBirthDate;
-            set
-            {
-                _userBirthDate = value;
-                OnPropertyChanged();
-            }
-        }
-        
-        public string UserIsAdult
-        {
-            get => _userIsAdult;
-            set
-            {
-                _userIsAdult = value;
-                OnPropertyChanged();
-            }
-        }
-        
-        public string UserWesternZodiac
-        {
-            get => _userWesternZodiac;
-            set
-            {
-                _userWesternZodiac = value;
-                OnPropertyChanged();
-            }
-        }
-        
-        public string UserChineseZodiac
-        {
-            get => _userChineseZodiac;
-            set
-            {
-                _userChineseZodiac = value;
-                OnPropertyChanged();
-            }
-        }
-        
-        public string UserIsBirthday
-        {
-            get => _userIsBirthday;
-            set
-            {
-                _userIsBirthday = value;
-                OnPropertyChanged();
-            }
-        }
+        public string ModeName => _modeName;
 
         #region Commands
-
-        public RelayCommand<object> ShowDateInfoCommand
+        
+        public RelayCommand<object> AddEditCommand
         {
             get
             {
-                return _applyChangesCommand ??= new RelayCommand<object>(
-                    ShowDateInfoImplementation, o => CanExecuteCommand());
+                return _addEditCommand ??= new RelayCommand<object>(
+                    AddEdit, o => CanAddOrEdit());
             }
         }
 
-        public RelayCommand<object> CloseCommand => 
-            _closeCommand ??= new RelayCommand<object>(o => Environment.Exit(0));
+        public RelayCommand<object> ReturnCommand
+        {
+            get
+            {
+                return _returnCommand ??= new RelayCommand<object>(
+                    Return, o => CanReturn());
+            }
+        }
 
         #endregion
         #endregion
 
-        private bool CanExecuteCommand()
+        private bool CanAddOrEdit()
         {
             return _userEnteredBirthDate != null && _userEnteredName != null && 
                    _userEnteredSurname != null && _userEnteredEMail != null;
         }
 
-        private void ShowDateInfo()
+        private bool CanReturn() => true;
+        
+
+        private void AddEdit(object obj)
         {
-            Thread.Sleep(2000);
             try
             {
-                var user = new Person(UserEnteredName, UserEnteredSurname, 
-                    UserEnteredEMail, UserEnteredBirthDate);
-                if (user.IsAdult.HasValue)
-                    UserIsAdult = "Is Adult: " + user.IsAdult.Value;
-                else UserIsAdult = "Is Adult: unknown";
-                UserWesternZodiac = user.SunSign.HasValue ? 
-                    Person.GetDescription(user.SunSign.Value) : "Western Zodiac Sign: unknown";
-                UserChineseZodiac = user.ChineseSign.HasValue ? 
-                    Person.GetDescription(user.ChineseSign.Value) : "Chinese Zodiac Sign: unknown";
-                if (user.IsBirthday.HasValue)
+                if (_add)
                 {
-                    if (user.IsBirthday.Value)
-                    {
-                        UserIsBirthday = "Is Birthday: true";
-                        MessageBox.Show("Happy Birthday! May all your dreams come true!");
-                    }
-                    else UserIsBirthday = "Is Birthday: false";
+                    AddUser();
                 }
-                else UserIsBirthday = "Is Birthday: unknown";
-                UserName = $"Name: {user.Name}";
-                UserSurname = $"Surname: {user.Surname}";
-                UserEMail = $"e-mail: {user.EMail}";
-                UserBirthDate = user.BirthDate.HasValue ? 
-                    $"Birth Date: {user.BirthDate.Value.Day}.{user.BirthDate.Value.Month}.{user.BirthDate.Value.Year}": 
-                    "Birth Date: unknown";
+                else
+                {
+                    EditUser();
+                }
             }
-            catch (ArgumentException e)
+            catch (Exception e)
             {
                 MessageBox.Show(e.Message);
             }
         }
 
-        private async void ShowDateInfoImplementation(object obj)
+        private void AddUser()
         {
-            UserName = string.Empty;
-            UserSurname = string.Empty;
-            UserEMail = string.Empty;
-            UserBirthDate = string.Empty;
-            UserIsBirthday = string.Empty;
-            UserIsAdult = string.Empty;
-            UserWesternZodiac = string.Empty;
-            UserChineseZodiac = string.Empty;
-            LoaderManager.Instance.ShowLoader();
-            await Task.Run(ShowDateInfo);
-            LoaderManager.Instance.HideLoader();
+            var newUser = new Person(_userEnteredName, _userEnteredSurname,
+                _userEnteredEMail, _userEnteredBirthDate);
+            StationManager.DataStorage.Users.Add(newUser);
+            StationManager.CurrentUser = newUser;
+        }
+
+        private void EditUser()
+        {
+            StationManager.CurrentUser.Name = _userEnteredName;
+            StationManager.CurrentUser.Surname = _userEnteredSurname;
+            StationManager.CurrentUser.EMail = _userEnteredEMail;
+            StationManager.CurrentUser.BirthDate = _userEnteredBirthDate;
+        }
+
+        private void Return(object obj)
+        {
+            NavigationManager.Instance.Navigate(ViewType.Main);
+            StationManager.CurrentUser = null;
+        }
+
+        public AddEditViewModel(bool add)
+        {
+            _add = add;
+            if (_add)
+            {
+                _modeName = "Add";
+                return;
+            }
+            _modeName = "Edit";
+            UserEnteredName = StationManager.CurrentUser.Name;
+            UserEnteredSurname = StationManager.CurrentUser.Surname;
+            UserEnteredEMail = StationManager.CurrentUser.EMail;
+            UserEnteredBirthDate = StationManager.CurrentUser.BirthDate;
         }
         
     }

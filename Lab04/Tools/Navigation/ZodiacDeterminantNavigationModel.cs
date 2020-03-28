@@ -1,5 +1,6 @@
 ﻿using System;
 using Lab04.Views;
+using Lab04.ViewModels;
 
 namespace Lab04.Tools.Navigation
 {
@@ -14,8 +15,11 @@ namespace Lab04.Tools.Navigation
         {
             switch (viewType)
             {
-                case ViewType.AddEdit:
-                    AddView(ViewType.AddEdit, new AddEditView());
+                case ViewType.Add:
+                    AddView(ViewType.Add, new AddEditView(new AddEditViewModel(true)));
+                    break;
+                case ViewType.Edit:
+                    AddView(ViewType.Edit, new AddEditView(new AddEditViewModel(false)));
                     break;
                 case ViewType.Main:
                     AddView(ViewType.Main, new MainView());

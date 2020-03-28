@@ -6,10 +6,10 @@ namespace Lab04.Views
 {
     public partial class AddEditView : UserControl, INavigatable
     {
-        public AddEditView()
+        public AddEditView(AddEditViewModel context)
         {
             InitializeComponent();
-            DataContext = new AddEditViewModel();
+            DataContext = context;
         }
     }
 }
