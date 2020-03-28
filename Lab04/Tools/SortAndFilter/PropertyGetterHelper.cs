@@ -7,7 +7,7 @@ namespace Lab04.Tools.SortAndFilter
 {
     internal static class PropertyGetterHelper
     {
-        internal static IEnumerable<PropertyGetter> GetPropertyGetters(Type type)
+        internal static ObservableCollection<PropertyGetter> GetPropertyGetters(Type type)
         {
             var getters = new ObservableCollection<PropertyGetter>();
             var properties = type.GetProperties();

@@ -17,7 +17,9 @@ namespace Lab04.ViewModels
         private string _userEnteredSurname;
         private string _userEnteredEMail;
         private readonly bool _add;
-        private string _modeName;
+        private readonly string _modeName;
+        private static readonly string AddModeName = "Add";
+        private static readonly string EditModeName = "Edit";
         
 
         #region Commands
@@ -114,6 +116,7 @@ namespace Lab04.ViewModels
                 {
                     EditUser();
                 }
+                Return(null);
             }
             catch (Exception e)
             {
@@ -148,10 +151,10 @@ namespace Lab04.ViewModels
             _add = add;
             if (_add)
             {
-                _modeName = "Add";
+                _modeName = AddModeName;
                 return;
             }
-            _modeName = "Edit";
+            _modeName = EditModeName;
             UserEnteredName = StationManager.CurrentUser.Name;
             UserEnteredSurname = StationManager.CurrentUser.Surname;
             UserEnteredEMail = StationManager.CurrentUser.EMail;

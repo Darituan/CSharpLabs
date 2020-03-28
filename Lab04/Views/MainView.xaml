@@ -17,8 +17,8 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <DataGrid Grid.Row="0" Grid.Column="0" Grid.RowSpan="7"
                   ScrollViewer.CanContentScroll="True"
@@ -41,5 +41,15 @@
         <Button Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Command="{Binding AddPersonCommand}">Add User</Button>
         <Button Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Command="{Binding EditPersonCommand}">Edit User</Button>
         <Button Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Command="{Binding DeletePersonCommand}">Delete User</Button>
+        <CheckBox Grid.Row="3" Grid.Column="1" 
+                  IsChecked="{Binding SortingEnabled}"
+                  Content="Sort by"
+                  ></CheckBox>
+        <ComboBox Grid.Row="3" Grid.Column="2" IsEnabled="{Binding SortingEnabled, UpdateSourceTrigger=PropertyChanged}"
+                  ItemsSource="{Binding Path=Getters, Mode=OneWay}"
+                  SelectedItem="{Binding Path=Getter}"
+                  SelectedValuePath="Name"/>
+        <Button Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Command="{Binding ApplySortingAndFiltersCommand}">Apply</Button>
+        <Button Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Command="{Binding ClearSortingAndFiltersCommand}">Clear</Button>
     </Grid>
 </UserControl>

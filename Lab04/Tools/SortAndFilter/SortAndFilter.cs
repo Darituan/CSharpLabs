@@ -9,7 +9,7 @@ namespace Lab04.Tools.SortAndFilter
 {
     internal static class SortAndFilter
     {
-        internal static ObservableCollection<Person> SortedUsers(IEnumerable<Person> users, 
+        internal static ObservableCollection<Person> SortUsers(IEnumerable<Person> users, 
             MethodInfo propGetter)
         {
             return new ObservableCollection<Person>
@@ -18,7 +18,7 @@ namespace Lab04.Tools.SortAndFilter
                 select user );
         }
 
-        internal static ObservableCollection<Person> FilteredUsers<T>(IEnumerable<Person> users,
+        internal static ObservableCollection<Person> FilterUsers<T>(IEnumerable<Person> users,
             MethodInfo propGetter, Func<T, T, bool> keyFunc, T key)
         where T: IComparable<T>
         {
@@ -28,7 +28,7 @@ namespace Lab04.Tools.SortAndFilter
                 select user );
         }
         
-        internal static ObservableCollection<Person> FilteredUsers(IEnumerable<Person> users,
+        internal static ObservableCollection<Person> FilterUsers(IEnumerable<Person> users,
             MethodInfo propGetter, bool propIsTrue)
         {
             return new ObservableCollection<Person>
