@@ -32,7 +32,8 @@ namespace Lab04.Tools.DataStorage
             }
         }
 
-        internal void AddUser(Person user)
+        /*
+         internal void AddUser(Person user)
         {
             _users.Add(user);
             SaveChanges();
@@ -50,6 +51,7 @@ namespace Lab04.Tools.DataStorage
             _users.Remove(user);
             SaveChanges();
         }
+        */
         
         private static ObservableCollection<Person> CreateDefaultUsers()
         {

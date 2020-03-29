@@ -37,12 +37,9 @@ namespace Lab04.Models
             get => _name;
             set
             {
-                if (value != null)
-                {
-                    if (! NameRegex.IsMatch(value))
-                        throw new InvalidNameException();
-                }
+                CheckNameString(value);
                 _name = value;
+                OnPropertyChanged();
             }
         }
         
@@ -51,12 +48,9 @@ namespace Lab04.Models
             get => _surname;
             set
             {
-                if (value != null)
-                {
-                    if (! NameRegex.IsMatch(value))
-                        throw new InvalidSurnameException();
-                }
+                CheckSurnameString(value);
                 _surname = value;
+                OnPropertyChanged();
             }
         }
 
@@ -67,6 +61,7 @@ namespace Lab04.Models
             {
                 CheckEMail(value);
                 _eMail = value;
+                OnPropertyChanged();
             }
         }
 
@@ -78,6 +73,7 @@ namespace Lab04.Models
                 CheckBirthDate(value);
                 _birthDate = value;
                 ChangeDependent();
+                OnPropertyChanged();
             }
         }
 
@@ -195,9 +191,28 @@ namespace Lab04.Models
             if (age > 135) throw new BornInDistantPastException();
             if (age < 0) throw new BornInFutureException();
         }
-        
-        public event PropertyChangedEventHandler PropertyChanged;
 
+        private static void CheckNameString(string value)
+        {
+            if (value != null)
+            {
+                if (! NameRegex.IsMatch(value))
+                    throw new InvalidNameException();
+            }
+        }
+        
+        private static void CheckSurnameString(string value)
+        {
+            if (value != null)
+            {
+                if (! NameRegex.IsMatch(value))
+                    throw new InvalidSurnameException();
+            }
+        }
+
+        [field:NonSerializedAttribute()]
+        public event PropertyChangedEventHandler PropertyChanged;
+        
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
