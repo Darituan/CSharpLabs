@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using Lab04.Models;
 using Lab04.Tools;
@@ -127,25 +128,43 @@ namespace Lab04.ViewModels
             var newUser = new Person(_userEnteredName, _userEnteredSurname,
                 _userEnteredEMail, _userEnteredBirthDate);
             StationManager.DataStorage.Users.Add(newUser);
-            StationManager.CurrentUser = newUser;
         }
 
         private void EditUser()
         {
-            StationManager.CurrentUser.Name = _userEnteredName;
-            StationManager.CurrentUser.Surname = _userEnteredSurname;
-            StationManager.CurrentUser.EMail = _userEnteredEMail;
-            StationManager.CurrentUser.BirthDate = _userEnteredBirthDate;
+            StationManager.DataStorage.CurrentUser.Name = _userEnteredName;
+            StationManager.DataStorage.CurrentUser.Surname = _userEnteredSurname;
+            StationManager.DataStorage.CurrentUser.EMail = _userEnteredEMail;
+            StationManager.DataStorage.CurrentUser.BirthDate = _userEnteredBirthDate;
         }
 
         private void Return(object obj)
         {
             NavigationManager.Instance.Navigate(ViewType.Main);
-            StationManager.CurrentUser = null;
+            StationManager.DataStorage.CurrentUser = null;
+        }
+
+        private void OnCurrentUserChanged(object obj, PropertyChangedEventArgs e)
+        {
+            if (_add)
+            {
+                UserEnteredName = null;
+                UserEnteredSurname = null;
+                UserEnteredEMail = null;
+                UserEnteredBirthDate = null;
+            }
+            else if (StationManager.DataStorage.CurrentUser != null)
+            {
+                UserEnteredName = StationManager.DataStorage.CurrentUser.Name;
+                UserEnteredSurname = StationManager.DataStorage.CurrentUser.Surname;
+                UserEnteredEMail = StationManager.DataStorage.CurrentUser.EMail;
+                UserEnteredBirthDate = StationManager.DataStorage.CurrentUser.BirthDate;
+            }
         }
 
         public AddEditViewModel(bool add)
         {
+            StationManager.DataStorage.PropertyChanged += OnCurrentUserChanged;
             _add = add;
             if (_add)
             {
@@ -153,10 +172,10 @@ namespace Lab04.ViewModels
                 return;
             }
             _modeName = EditModeName;
-            UserEnteredName = StationManager.CurrentUser.Name;
-            UserEnteredSurname = StationManager.CurrentUser.Surname;
-            UserEnteredEMail = StationManager.CurrentUser.EMail;
-            UserEnteredBirthDate = StationManager.CurrentUser.BirthDate;
+            UserEnteredName = StationManager.DataStorage.CurrentUser.Name;
+            UserEnteredSurname = StationManager.DataStorage.CurrentUser.Surname;
+            UserEnteredEMail = StationManager.DataStorage.CurrentUser.EMail;
+            UserEnteredBirthDate = StationManager.DataStorage.CurrentUser.BirthDate;
         }
         
     }

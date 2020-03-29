@@ -9,8 +9,6 @@ namespace Lab04.Tools.Managers
     {
         private static SerializedDataStorage _dataStorage;
 
-        internal static Person CurrentUser { get; set; }
-
         internal static SerializedDataStorage DataStorage => _dataStorage;
 
         internal static void Initialize(SerializedDataStorage dataStorage)

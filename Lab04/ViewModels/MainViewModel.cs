@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Reflection;
 using System.Threading.Tasks;
 using Lab04.Models;
@@ -330,8 +331,8 @@ namespace Lab04.ViewModels
 
         public Person CurrentUser
         {
-            get => StationManager.CurrentUser;
-            set => StationManager.CurrentUser = value;
+            get => StationManager.DataStorage.CurrentUser;
+            set => StationManager.DataStorage.CurrentUser = value;
         }
         
         public RelayCommand<object> DeletePersonCommand
@@ -528,7 +529,7 @@ namespace Lab04.ViewModels
 
         private void AddPerson(object obj)
         {
-            StationManager.CurrentUser = null;
+            StationManager.DataStorage.CurrentUser = null;
             NavigationManager.Instance.Navigate(ViewType.Add);
         }
         
@@ -597,45 +598,60 @@ namespace Lab04.ViewModels
             BirthdayFilterBool = null;
         }
 
+        private void ApplyChanges(ObservableCollection<Person> users)
+        {
+            var boundGetters = new List<MethodInfo>();
+            var stringGetters = new List<MethodInfo>();
+            var boolGetters = new List<MethodInfo>();
+            foreach (var getter in _getters)
+            {
+                if (getter.Getter.ReturnType == typeof(string))
+                    stringGetters.Add(getter.Getter);
+                else if (getter.Getter.ReturnType == typeof(bool?))
+                    boolGetters.Add(getter.Getter);
+                else boundGetters.Add(getter.Getter);
+            }
+            var lowerBounds = new List<IComparable>();
+            lowerBounds.Add(BirthDateLowerBound);
+            lowerBounds.Add(SunSignsLowerBound);
+            lowerBounds.Add(ChineseSignsLowerBound);
+            var higherBounds = new List<IComparable>();
+            higherBounds.Add(BirthDateHigherBound);
+            higherBounds.Add(SunSignsHigherBound);
+            higherBounds.Add(ChineseSignsHigherBound);
+            var stringKeys = new List<string>();
+            stringKeys.Add(NameFilterString);
+            stringKeys.Add(SurnameFilterString);
+            stringKeys.Add(EMailFilterString);
+            var boolKeys = new List<bool?>();
+            boolKeys.Add(AdultFilterBool);
+            boolKeys.Add(BirthdayFilterBool);
+            if (SortingEnabled)
+                Users = SortAndFilter.SortAndFilterUsers(users, boundGetters,
+                    stringGetters, boolGetters, lowerBounds, higherBounds,
+                    stringKeys, boolKeys, Getter.Getter);
+            else Users = SortAndFilter.SortAndFilterUsers(users, boundGetters,
+                stringGetters, boolGetters, lowerBounds, higherBounds,
+                stringKeys, boolKeys);
+            _sortingAndFiltersApplied = true;
+        }
+
+        private async void ApplyNotifiedChanges()
+        {
+            LoaderManager.Instance.ShowLoader();
+            await Task.Run(() =>
+            {
+                ApplyChanges(Users);
+            });
+            LoaderManager.Instance.HideLoader();
+        }
+
         private async void ApplySortingAndFilters(object obj)
         {
             LoaderManager.Instance.ShowLoader();
             await Task.Run(() =>
             {
-                var boundGetters = new List<MethodInfo>();
-                var stringGetters = new List<MethodInfo>();
-                var boolGetters = new List<MethodInfo>();
-                foreach (var getter in _getters)
-                {
-                    if (getter.Getter.ReturnType == typeof(string))
-                        stringGetters.Add(getter.Getter);
-                    else if (getter.Getter.ReturnType == typeof(bool?))
-                        boolGetters.Add(getter.Getter);
-                    else boundGetters.Add(getter.Getter);
-                }
-                var lowerBounds = new List<IComparable>();
-                lowerBounds.Add(BirthDateLowerBound);
-                lowerBounds.Add(SunSignsLowerBound);
-                lowerBounds.Add(ChineseSignsLowerBound);
-                var higherBounds = new List<IComparable>();
-                higherBounds.Add(BirthDateHigherBound);
-                higherBounds.Add(SunSignsHigherBound);
-                higherBounds.Add(ChineseSignsHigherBound);
-                var stringKeys = new List<string>();
-                stringKeys.Add(NameFilterString);
-                stringKeys.Add(SurnameFilterString);
-                stringKeys.Add(EMailFilterString);
-                var boolKeys = new List<bool?>();
-                boolKeys.Add(AdultFilterBool);
-                boolKeys.Add(BirthdayFilterBool);
-                if (SortingEnabled)
-                    Users = SortAndFilter.SortAndFilterUsers(StationManager.DataStorage.Users, boundGetters,
-                        stringGetters, boolGetters, lowerBounds, higherBounds,
-                        stringKeys, boolKeys, Getter.Getter);
-                else Users = SortAndFilter.SortAndFilterUsers(StationManager.DataStorage.Users, boundGetters,
-                    stringGetters, boolGetters, lowerBounds, higherBounds,
-                    stringKeys, boolKeys);
-                _sortingAndFiltersApplied = true;
+                ApplyChanges(StationManager.DataStorage.Users);
             });
             LoaderManager.Instance.HideLoader();
         }
@@ -645,7 +661,7 @@ namespace Lab04.ViewModels
             LoaderManager.Instance.ShowLoader();
             await Task.Run(() =>
             {
-                Users = StationManager.DataStorage.Users;
+                Users = new ObservableCollection<Person>(StationManager.DataStorage.Users);
                 ClearSortIfNeeded(null);
                 ClearNameIfNeeded(null);
                 ClearSurnameIfNeeded(null);
@@ -677,9 +693,36 @@ namespace Lab04.ViewModels
                 ApplySortingAndFilters(null);
         }
 
+        private void OnUsersChanged(object obj, NotifyCollectionChangedEventArgs e)
+        {
+            switch(e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    
+                    var newUser = e.NewItems[0] as Person;
+                    Users.Add(newUser);
+                    if (HasFiltersOrSorting())
+                    {
+                        ApplyNotifiedChanges();
+                    }
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    var oldUser = e.OldItems[0] as Person;
+                    Users.Remove(oldUser);
+                    break;
+                default:
+                    if (HasFiltersOrSorting())
+                    {
+                        ApplyNotifiedChanges();
+                    }
+                    break;
+            }
+        }
+
         public MainViewModel()
         {
-            _users = StationManager.DataStorage.Users;
+            _users = new ObservableCollection<Person>(StationManager.DataStorage.Users);
+            StationManager.DataStorage.Users.CollectionChanged += OnUsersChanged;
         }
         
     }

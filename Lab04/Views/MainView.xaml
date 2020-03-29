@@ -37,7 +37,7 @@
         <DataGrid Grid.Row="0" Grid.Column="0" Grid.RowSpan="20"
                   ScrollViewer.CanContentScroll="True"
                   ItemsSource="{Binding Users, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                  SelectedItem="{Binding CurrentUser, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
+                  SelectedItem="{Binding CurrentUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   AutoGenerateColumns="False" IsReadOnly="True"
                   SelectionUnit="FullRow" SelectionMode="Single">
             <DataGrid.Columns>
