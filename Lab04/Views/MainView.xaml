@@ -3,10 +3,24 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:enums="clr-namespace:Lab04.Enums"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
@@ -20,7 +34,7 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <DataGrid Grid.Row="0" Grid.Column="0" Grid.RowSpan="7"
+        <DataGrid Grid.Row="0" Grid.Column="0" Grid.RowSpan="20"
                   ScrollViewer.CanContentScroll="True"
                   ItemsSource="{Binding Users, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                   SelectedItem="{Binding CurrentUser, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
@@ -44,12 +58,127 @@
         <CheckBox Grid.Row="3" Grid.Column="1" 
                   IsChecked="{Binding SortingEnabled}"
                   Content="Sort by"
+                  Command="{Binding ClearSortIfNeededCommand}"
                   ></CheckBox>
         <ComboBox Grid.Row="3" Grid.Column="2" IsEnabled="{Binding SortingEnabled, UpdateSourceTrigger=PropertyChanged}"
                   ItemsSource="{Binding Path=Getters, Mode=OneWay}"
                   SelectedItem="{Binding Path=Getter}"
                   SelectedValuePath="Name"/>
-        <Button Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Command="{Binding ApplySortingAndFiltersCommand}">Apply</Button>
-        <Button Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Command="{Binding ClearSortingAndFiltersCommand}">Clear</Button>
+        <CheckBox Grid.Row="4" Grid.Column="1"
+                  IsChecked="{Binding NameFilterEnabled}"
+                  Content="Filter by name"
+                  Command="{Binding ClearNameIfNeededCommand}"
+        ></CheckBox>
+        <TextBox Grid.Row ="4" Grid.Column="2" Width="185" HorizontalAlignment="center"
+                 IsEnabled="{Binding NameFilterEnabled, UpdateSourceTrigger=PropertyChanged}"
+                 Text="{Binding NameFilterString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <CheckBox Grid.Row="5" Grid.Column="1"
+                  IsChecked="{Binding SurnameFilterEnabled}"
+                  Content="Filter by surname"
+                  Command="{Binding ClearSurnameIfNeededCommand}"
+        ></CheckBox>
+        <TextBox Grid.Row ="5" Grid.Column="2" Width="185" HorizontalAlignment="center"
+                 IsEnabled="{Binding SurnameFilterEnabled, UpdateSourceTrigger=PropertyChanged}"
+                 Text="{Binding SurnameFilterString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <CheckBox Grid.Row="6" Grid.Column="1"
+                  IsChecked="{Binding EMailFilterEnabled}"
+                  Content="Filter by e-mail"
+                  Command="{Binding ClearEMailIfNeededCommand}"
+        ></CheckBox>
+        <TextBox Grid.Row ="6" Grid.Column="2" Width="185" HorizontalAlignment="center"
+                 IsEnabled="{Binding EMailFilterEnabled, UpdateSourceTrigger=PropertyChanged}"
+                 Text="{Binding EMailFilterString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" 
+               Content="Filter by birth date:" HorizontalAlignment="center"></Label>
+        <CheckBox Grid.Row="8" Grid.Column="1"
+                  IsChecked="{Binding BirthDateFilterFromEnabled}"
+                  Content="from"
+                  Command="{Binding ClearBirthDateLowerIfNeededCommand}"
+        ></CheckBox>
+        <DatePicker Grid.Row="8" Grid.Column="2"
+                    IsEnabled="{Binding BirthDateFromFilterEnabled, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedDate="{Binding Path=BirthDateLowerBound, Mode=TwoWay}">
+        </DatePicker>
+        <CheckBox Grid.Row="9" Grid.Column="1"
+                  IsChecked="{Binding BirthDateFilterToEnabled}"
+                  Content="to"
+                  Command="{Binding ClearBirthDateHigherIfNeededCommand}"
+        ></CheckBox>
+        <DatePicker Grid.Row="9" Grid.Column="2"
+                    IsEnabled="{Binding BirthdateToFilterEnabled, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedDate="{Binding Path=BirthDateHigherBound, Mode=TwoWay}">
+        </DatePicker>
+        <Label Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2" 
+               Content="Filter by sun sign:" HorizontalAlignment="center"></Label>
+        <CheckBox Grid.Row="11" Grid.Column="1"
+                  IsChecked="{Binding SunSignsFilterFromEnabled}"
+                  Content="from"
+                  Command="{Binding ClearSunSignsLowerIfNeededCommand}"
+        ></CheckBox>
+        <ComboBox Grid.Row="11" Grid.Column="2" 
+                  IsEnabled="{Binding SunSignsFilterFromEnabled, UpdateSourceTrigger=PropertyChanged}"
+                  ItemsSource="{Binding Source={enums:EnumBindingSource {x:Type enums:SunSigns}}}"
+                  SelectedValue="{Binding Path=SunSignsLowerBound, Mode=TwoWay}"
+                  SelectedValuePath="Value"
+                  DisplayMemberPath="DisplayName"/>
+        <CheckBox Grid.Row="12" Grid.Column="1"
+                  IsChecked="{Binding SunSignsFilterToEnabled}"
+                  Content="to"
+                  Command="{Binding ClearSunSignsHigherIfNeededCommand}"
+        ></CheckBox>
+        <ComboBox Grid.Row="12" Grid.Column="2" 
+                  IsEnabled="{Binding SunSignsFilterToEnabled, UpdateSourceTrigger=PropertyChanged}"
+                  ItemsSource="{Binding Source={enums:EnumBindingSource {x:Type enums:SunSigns}}}"
+                  SelectedValue="{Binding Path=SunSignsHigherBound, Mode=TwoWay}"
+                  SelectedValuePath="Value"
+                  DisplayMemberPath="DisplayName"/>
+        <Label Grid.Row="13" Grid.Column="1" Grid.ColumnSpan="2" 
+               Content="Filter by chinese sign:" HorizontalAlignment="center"></Label>
+        <CheckBox Grid.Row="14" Grid.Column="1"
+                  IsChecked="{Binding ChineseSignsFilterFromEnabled}"
+                  Content="from"
+                  Command="{Binding ClearChineseSignsLowerIfNeededCommand}"
+        ></CheckBox>
+        <ComboBox Grid.Row="14" Grid.Column="2" 
+                  IsEnabled="{Binding ChineseSignsFilterFromEnabled, UpdateSourceTrigger=PropertyChanged}"
+                  ItemsSource="{Binding Source={enums:EnumBindingSource {x:Type enums:ChineseSigns}}}"
+                  SelectedValue="{Binding Path=ChineseSignsLowerBound, Mode=TwoWay}"
+                  SelectedValuePath="Value"
+                  DisplayMemberPath="DisplayName"/>
+        <CheckBox Grid.Row="15" Grid.Column="1"
+                  IsChecked="{Binding ChineseSignsFilterToEnabled}"
+                  Content="to"
+                  Command="{Binding ClearChineseSignsHigherIfNeededCommand}"
+        ></CheckBox>
+        <ComboBox Grid.Row="15" Grid.Column="2" 
+                  IsEnabled="{Binding ChineseSignsFilterToEnabled, UpdateSourceTrigger=PropertyChanged}"
+                  ItemsSource="{Binding Source={enums:EnumBindingSource {x:Type enums:ChineseSigns}}}"
+                  SelectedValue="{Binding Path=ChineseSignsHigherBound, Mode=TwoWay}"
+                  SelectedValuePath="Value"
+                  DisplayMemberPath="DisplayName"/>
+        <CheckBox Grid.Row="16" Grid.Column="1"
+                  IsChecked="{Binding AdultFilterEnabled}"
+                  Content="Filter by being adult"
+                  Command="{Binding ClearAdultIfNeededCommand}"
+        ></CheckBox>
+        <CheckBox Grid.Row="16" Grid.Column="2"
+                  IsEnabled="{Binding AdultFilterEnabled, UpdateSourceTrigger=PropertyChanged}"
+                  IsChecked="{Binding AdultFilterBool}"
+                  Content="Is adult"
+        ></CheckBox>
+        <CheckBox Grid.Row="17" Grid.Column="1"
+                  IsChecked="{Binding BirthdayFilterEnabled}"
+                  Content="Filter by having birthday"
+                  Command="{Binding ClearBirthdayIfNeededCommand}"
+        ></CheckBox>
+        <CheckBox Grid.Row="17" Grid.Column="2"
+                  IsEnabled="{Binding BirthdayFilterEnabled, UpdateSourceTrigger=PropertyChanged}"
+                  IsChecked="{Binding BirthdayFilterBool}"
+                  Content="Has birthday today"
+        ></CheckBox>
+        <Button Grid.Row="18" Grid.Column="1" Grid.ColumnSpan="2" 
+                Command="{Binding ApplySortingAndFiltersCommand}">Apply</Button>
+        <Button Grid.Row="19" Grid.Column="1" Grid.ColumnSpan="2" 
+                Command="{Binding ClearSortingAndFiltersCommand}">Clear</Button>
     </Grid>
 </UserControl>

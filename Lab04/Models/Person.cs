@@ -1,14 +1,15 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
+using System.Runtime.CompilerServices;
 using Lab04.Exceptions;
+using Lab04.Enums;
 using System.Text.RegularExpressions;
 
 namespace Lab04.Models
 {
     [Serializable]
-    internal class Person
+    internal class Person: INotifyPropertyChanged
     {
         
         #region Fields
@@ -195,12 +196,11 @@ namespace Lab04.Models
             if (age < 0) throw new BornInFutureException();
         }
         
-        internal static string GetDescription<T>(T genericEnum) where T: Enum
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            var memberInfo = typeof(T).GetMember(genericEnum.ToString());
-            if (memberInfo.Length <= 0) return genericEnum.ToString();
-            var attribs = memberInfo[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
-            return attribs.Any() ? ((DescriptionAttribute)attribs.ElementAt(0)).Description : genericEnum.ToString();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         internal Person(string name, string surname, string email, DateTime? birthDate)

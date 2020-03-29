@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Lab04.Models
+namespace Lab04.Enums
 {
     internal enum SunSigns
     {
