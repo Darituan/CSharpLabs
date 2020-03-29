@@ -41,25 +41,26 @@ namespace Lab04.Tools.SortAndFilter
             var len = boundFilterGetters.Count;
             for (var i = 0; i < len; ++i)
             {
-                var filterPropertyValue = (IComparable) boundFilterGetters[i].Invoke(user, null);
-                if (lowerBounds[i] != null && filterPropertyValue.CompareTo(lowerBounds[i]) < 0 ||
-                    higherBounds[i] != null && filterPropertyValue.CompareTo(higherBounds[i]) > 0)
+                if (boundFilterGetters[i].Invoke(user, null) is IComparable filterPropertyValue && 
+                    (lowerBounds[i] != null && 
+                    filterPropertyValue.CompareTo(lowerBounds[i]) < 0 ||
+                     higherBounds[i] != null && filterPropertyValue.CompareTo(higherBounds[i]) > 0))
                     return false;
             }
 
             len = stringFilterGetters.Count;
             for (var i = 0; i < len; ++i)
             {
-                var filterPropertyValue = (string) stringFilterGetters[i].Invoke(user, null);
-                if (stringKeys[i] != null && ! filterPropertyValue.Contains(stringKeys[i]))
+                if (stringFilterGetters[i].Invoke(user, null) is string filterPropertyValue && 
+                    stringKeys[i] != null && ! filterPropertyValue.Contains(stringKeys[i]))
                     return false;
             }
             
             len = boolFilterGetters.Count;
             for (var i = 0; i < len; ++i)
             {
-                var filterPropertyValue = (bool) boolFilterGetters[i].Invoke(user, null);
-                if (boolKeys[i] != null && ! filterPropertyValue == boolKeys[i])
+                if (boolFilterGetters[i].Invoke(user, null) is bool filterPropertyValue && 
+                    boolKeys[i] != null && ! (bool?) filterPropertyValue == boolKeys[i])
                     return false;
             }
             

@@ -609,23 +609,19 @@ namespace Lab04.ViewModels
                     stringGetters.Add(getter.Getter);
                 else if (getter.Getter.ReturnType == typeof(bool?))
                     boolGetters.Add(getter.Getter);
-                else boundGetters.Add(getter.Getter);
+                else if (getter.Getter.ReturnType == typeof(SunSigns?) ||
+                         getter.Getter.ReturnType == typeof(ChineseSigns?) ||
+                         getter.Getter.ReturnType == typeof(DateTime?))
+                    boundGetters.Add(getter.Getter);
             }
-            var lowerBounds = new List<IComparable>();
-            lowerBounds.Add(BirthDateLowerBound);
-            lowerBounds.Add(SunSignsLowerBound);
-            lowerBounds.Add(ChineseSignsLowerBound);
-            var higherBounds = new List<IComparable>();
-            higherBounds.Add(BirthDateHigherBound);
-            higherBounds.Add(SunSignsHigherBound);
-            higherBounds.Add(ChineseSignsHigherBound);
-            var stringKeys = new List<string>();
-            stringKeys.Add(NameFilterString);
-            stringKeys.Add(SurnameFilterString);
-            stringKeys.Add(EMailFilterString);
-            var boolKeys = new List<bool?>();
-            boolKeys.Add(AdultFilterBool);
-            boolKeys.Add(BirthdayFilterBool);
+
+            var lowerBounds = new List<IComparable> {BirthDateLowerBound, SunSignsLowerBound, ChineseSignsLowerBound};
+            var higherBounds = new List<IComparable>
+            {
+                BirthDateHigherBound, SunSignsHigherBound, ChineseSignsHigherBound
+            };
+            var stringKeys = new List<string> {NameFilterString, SurnameFilterString, EMailFilterString};
+            var boolKeys = new List<bool?> {AdultFilterBool, BirthdayFilterBool};
             if (SortingEnabled)
                 Users = SortAndFilter.SortAndFilterUsers(users, boundGetters,
                     stringGetters, boolGetters, lowerBounds, higherBounds,
