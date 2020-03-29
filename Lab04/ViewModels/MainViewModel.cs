@@ -496,12 +496,12 @@ namespace Lab04.ViewModels
 
         private bool CanApplySortingAndFilters()
         {
-            return HasFiltersOrSorting();
+            return HasFiltersOrSorting() && HasFiltersOrSortingEnabled();
         }
         
         private bool CanClearSortingAndFilters()
         {
-            return HasFiltersOrSorting();
+            return HasFiltersOrSorting() && HasFiltersOrSortingEnabled();
         }
 
         private bool CanAddPerson()
@@ -680,6 +680,14 @@ namespace Lab04.ViewModels
         }
 
         private bool HasFiltersOrSorting()
+        {
+            return Getter != null || NameFilterString != null || SurnameFilterString != null ||
+                   EMailFilterString != null || BirthDateLowerBound != null || BirthDateHigherBound != null ||
+                   SunSignsLowerBound != null || SunSignsHigherBound != null || ChineseSignsLowerBound != null ||
+                   ChineseSignsHigherBound != null || AdultFilterBool != null || BirthdayFilterBool != null;
+        }
+
+        private bool HasFiltersOrSortingEnabled()
         {
             return SortingEnabled || NameFilterEnabled || SurnameFilterEnabled || EMailFilterEnabled ||
                    BirthDateFilterFromEnabled || BirthDateFilterToEnabled || SunSignsFilterFromEnabled ||

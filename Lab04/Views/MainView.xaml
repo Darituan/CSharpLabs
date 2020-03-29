@@ -96,7 +96,7 @@
                   Command="{Binding ClearBirthDateLowerIfNeededCommand}"
         ></CheckBox>
         <DatePicker Grid.Row="8" Grid.Column="2"
-                    IsEnabled="{Binding BirthDateFromFilterEnabled, UpdateSourceTrigger=PropertyChanged}"
+                    IsEnabled="{Binding BirthDateFilterFromEnabled, UpdateSourceTrigger=PropertyChanged}"
                     SelectedDate="{Binding Path=BirthDateLowerBound, Mode=TwoWay}">
         </DatePicker>
         <CheckBox Grid.Row="9" Grid.Column="1"
@@ -105,7 +105,7 @@
                   Command="{Binding ClearBirthDateHigherIfNeededCommand}"
         ></CheckBox>
         <DatePicker Grid.Row="9" Grid.Column="2"
-                    IsEnabled="{Binding BirthdateToFilterEnabled, UpdateSourceTrigger=PropertyChanged}"
+                    IsEnabled="{Binding BirthDateFilterToEnabled, UpdateSourceTrigger=PropertyChanged}"
                     SelectedDate="{Binding Path=BirthDateHigherBound, Mode=TwoWay}">
         </DatePicker>
         <Label Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2" 
