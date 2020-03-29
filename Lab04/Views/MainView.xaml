@@ -49,7 +49,7 @@
                 <DataGridTextColumn Header="Sun Sign" Binding="{Binding SunSign, Mode=OneWay}" />
                 <DataGridTextColumn Header="Chinese Sign" Binding="{Binding ChineseSign, Mode=OneWay}" />
                 <DataGridCheckBoxColumn Header="Is Adult" Binding="{Binding IsAdult, Mode=OneWay}" />
-                <DataGridCheckBoxColumn Header="Birthday Today" Binding="{Binding IsBirthday, Mode=OneWay}" />
+                <DataGridCheckBoxColumn Header="Birthday Today" Binding="{Binding HasBirthdayToday, Mode=OneWay}" />
             </DataGrid.Columns>
         </DataGrid>
         <Button Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Command="{Binding AddPersonCommand}">Add User</Button>
