@@ -7,7 +7,8 @@ namespace Lab04.Enums
     public class EnumBindingSource : MarkupExtension
     {
         private Type _enumType;
-        public Type EnumType
+
+        private Type EnumType
         {
             get { return _enumType; }
             set
