@@ -23,6 +23,7 @@ namespace Lab04.ViewModels
         private PropertyGetter _getter;
         
         private bool _sortingEnabled;
+        private bool _filtersOrSortingApplied;
         
         private bool _nameFilterEnabled;
         private string _nameFilterString;
@@ -35,26 +36,24 @@ namespace Lab04.ViewModels
         
         private bool _birthDateFilterFromEnabled;
         private bool _birthDateFilterToEnabled;
-        private DateTime? _birthDateLowerBound;
-        private DateTime? _birthDateHigherBound;
+        private DateTime _birthDateLowerBound;
+        private DateTime _birthDateHigherBound;
         
         private bool _chineseSignsFilterFromEnabled;
         private bool _chineseSignsFilterToEnabled;
-        private ChineseSigns? _chineseSignsLowerBound;
-        private ChineseSigns? _chineseSignsHigherBound;
+        private ChineseSigns _chineseSignsLowerBound;
+        private ChineseSigns _chineseSignsHigherBound;
         
         private bool _sunSignsFilterFromEnabled;
         private bool _sunSignsFilterToEnabled;
-        private SunSigns? _sunSignsLowerBound;
-        private SunSigns? _sunSignsHigherBound;
+        private SunSigns _sunSignsLowerBound;
+        private SunSigns _sunSignsHigherBound;
         
         private bool _adultFilterEnabled;
-        private bool? _adultFilterBool;
+        private bool _adultFilterBool;
         
         private bool _birthdayFilterEnabled;
-        private bool? _birthdayFilterBool;
-        
-        private bool _sortingAndFiltersApplied;
+        private bool _birthdayFilterBool;
 
         private RelayCommand<object> _addPersonCommand;
         private RelayCommand<object> _editPersonCommand;
@@ -62,20 +61,7 @@ namespace Lab04.ViewModels
         
         private RelayCommand<object> _applySortingAndFiltersCommand;
         private RelayCommand<object> _clearSortingAndFiltersCommand;
-        
-        private RelayCommand<object> _clearSortIfNeededCommand;
-        private RelayCommand<object> _clearNameIfNeededCommand;
-        private RelayCommand<object> _clearSurnameIfNeededCommand;
-        private RelayCommand<object> _clearEMailIfNeededCommand;
-        private RelayCommand<object> _clearBirthDateLowerIfNeededCommand;
-        private RelayCommand<object> _clearBirthDateHigherIfNeededCommand;
-        private RelayCommand<object> _clearSunSignsLowerIfNeededCommand;
-        private RelayCommand<object> _clearSunSignsHigherIfNeededCommand;
-        private RelayCommand<object> _clearChineseSignsLowerIfNeededCommand;
-        private RelayCommand<object> _clearChineseSignsHigherIfNeededCommand;
-        private RelayCommand<object> _clearAdultIfNeededCommand;
-        private RelayCommand<object> _clearBirthdayIfNeededCommand;
-        
+
 
         public ObservableCollection<Person> Users
         {
@@ -249,7 +235,7 @@ namespace Lab04.ViewModels
             }
         }
         
-        public DateTime? BirthDateLowerBound
+        public DateTime BirthDateLowerBound
         {
             get => _birthDateLowerBound;
             set
@@ -259,7 +245,7 @@ namespace Lab04.ViewModels
             }
         }
         
-        public DateTime? BirthDateHigherBound
+        public DateTime BirthDateHigherBound
         {
             get => _birthDateHigherBound;
             set
@@ -269,7 +255,7 @@ namespace Lab04.ViewModels
             }
         }
         
-        public SunSigns? SunSignsLowerBound
+        public SunSigns SunSignsLowerBound
         {
             get => _sunSignsLowerBound;
             set
@@ -279,7 +265,7 @@ namespace Lab04.ViewModels
             }
         }
 
-        public SunSigns? SunSignsHigherBound
+        public SunSigns SunSignsHigherBound
         {
             get => _sunSignsHigherBound;
             set
@@ -289,7 +275,7 @@ namespace Lab04.ViewModels
             }
         }
         
-        public ChineseSigns? ChineseSignsHigherBound
+        public ChineseSigns ChineseSignsHigherBound
         {
             get => _chineseSignsHigherBound;
             set
@@ -299,7 +285,7 @@ namespace Lab04.ViewModels
             }
         }
         
-        public ChineseSigns? ChineseSignsLowerBound
+        public ChineseSigns ChineseSignsLowerBound
         {
             get => _chineseSignsLowerBound;
             set
@@ -309,7 +295,7 @@ namespace Lab04.ViewModels
             }
         }
         
-        public bool? AdultFilterBool
+        public bool AdultFilterBool
         {
             get => _adultFilterBool;
             set
@@ -319,7 +305,7 @@ namespace Lab04.ViewModels
             }
         }
         
-        public bool? BirthdayFilterBool
+        public bool BirthdayFilterBool
         {
             get => _birthdayFilterBool;
             set
@@ -376,132 +362,18 @@ namespace Lab04.ViewModels
             get
             {
                 return _clearSortingAndFiltersCommand ??= new RelayCommand<object>(
-                    ClearSortingAndFilters, o => CanClearSortingAndFilters());
+                    ClearSortingAndFilters, o => CanClearTextFilters());
             }
-        }
-        
-        public RelayCommand<object> ClearSortIfNeededCommand
-        {
-            get
-            {
-                return _clearSortIfNeededCommand ??= new RelayCommand<object>(
-                    ClearSortIfNeeded, o => CanClearIfNeeded());
-            }
-        }
-        
-        public RelayCommand<object> ClearNameIfNeededCommand
-        {
-            get
-            {
-                return _clearNameIfNeededCommand ??= new RelayCommand<object>(
-                    ClearNameIfNeeded, o => CanClearIfNeeded());
-            }
-        }
-        
-        public RelayCommand<object> ClearSurnameIfNeededCommand
-        {
-            get
-            {
-                return _clearSurnameIfNeededCommand ??= new RelayCommand<object>(
-                    ClearSurnameIfNeeded, o => CanClearIfNeeded());
-            }
-        }
-        
-        public RelayCommand<object> ClearEMailIfNeededCommand
-        {
-            get
-            {
-                return _clearEMailIfNeededCommand ??= new RelayCommand<object>(
-                    ClearEMailIfNeeded, o => CanClearIfNeeded());
-            }
-        }
-        
-        public RelayCommand<object> ClearBirthDateLowerIfNeededCommand
-        {
-            get
-            {
-                return _clearBirthDateLowerIfNeededCommand ??= new RelayCommand<object>(
-                    ClearBirthDateLowerIfNeeded, o => CanClearIfNeeded());
-            }
-        }
-        
-        public RelayCommand<object> ClearBirthDateHigherIfNeededCommand
-        {
-            get
-            {
-                return _clearBirthDateHigherIfNeededCommand ??= new RelayCommand<object>(
-                    ClearBirthDateHigherIfNeeded, o => CanClearIfNeeded());
-            }
-        }
-        
-        public RelayCommand<object> ClearSunSignsLowerIfNeededCommand
-        {
-            get
-            {
-                return _clearSunSignsLowerIfNeededCommand ??= new RelayCommand<object>(
-                    ClearSunSignsLowerIfNeeded, o => CanClearIfNeeded());
-            }
-        }
-        
-        public RelayCommand<object> ClearSunSignsHigherIfNeededCommand
-        {
-            get
-            {
-                return _clearSunSignsHigherIfNeededCommand ??= new RelayCommand<object>(
-                    ClearSunSignsHigherIfNeeded, o => CanClearIfNeeded());
-            }
-        }
-        
-        public RelayCommand<object> ClearChineseSignsLowerIfNeededCommand
-        {
-            get
-            {
-                return _clearChineseSignsLowerIfNeededCommand ??= new RelayCommand<object>(
-                    ClearChineseSignsLowerIfNeeded, o => CanClearIfNeeded());
-            }
-        }
-        
-        public RelayCommand<object> ClearChineseSignsHigherIfNeededCommand
-        {
-            get
-            {
-                return _clearChineseSignsHigherIfNeededCommand ??= new RelayCommand<object>(
-                    ClearChineseSignsHigherIfNeeded, o => CanClearIfNeeded());
-            }
-        }
-        
-        public RelayCommand<object> ClearBirthdayIfNeededCommand
-        {
-            get
-            {
-                return _clearBirthdayIfNeededCommand ??= new RelayCommand<object>(
-                    ClearBirthdayIfNeeded, o => CanClearIfNeeded());
-            }
-        }
-        
-        public RelayCommand<object> ClearAdultIfNeededCommand
-        {
-            get
-            {
-                return _clearAdultIfNeededCommand ??= new RelayCommand<object>(
-                    ClearAdultIfNeeded, o => CanClearIfNeeded());
-            }
-        }
-
-
-        private bool CanClearIfNeeded()
-        {
-            return true;
         }
 
         private bool CanApplySortingAndFilters()
         {
-            return HasFiltersOrSorting() && HasFiltersOrSortingEnabled();
+            return EnabledFiltersEntered() && HasFiltersOrSortingEnabled();
         }
         
-        private bool CanClearSortingAndFilters()
+        private bool CanClearTextFilters()
         {
-            return HasFiltersOrSorting() && HasFiltersOrSortingEnabled();
+            return _filtersOrSortingApplied;
         }
 
         private bool CanAddPerson()
@@ -538,98 +410,56 @@ namespace Lab04.ViewModels
             NavigationManager.Instance.Navigate(ViewType.Edit);
         }
 
-        private void ClearSortIfNeeded(object obj)
-        {
-            Getter = null;
-        }
-
-        private void ClearNameIfNeeded(object obj)
+        private void ClearName()
         {
             NameFilterString = null;
         }
         
-        private void ClearSurnameIfNeeded(object obj)
+        private void ClearSurname()
         {
             SurnameFilterString = null;
         }
         
-        private void ClearEMailIfNeeded(object obj)
+        private void ClearEMail()
         {
             EMailFilterString = null;
         }
 
-        private void ClearBirthDateLowerIfNeeded(object obj)
-        {
-            BirthDateLowerBound = null;
-        }
-        
-        private void ClearBirthDateHigherIfNeeded(object obj)
-        {
-            BirthDateHigherBound = null;
-        }
-        
-        private void ClearSunSignsLowerIfNeeded(object obj)
-        {
-            SunSignsLowerBound = null;
-        }
-        
-        private void ClearSunSignsHigherIfNeeded(object obj)
-        {
-            SunSignsHigherBound = null;
-        }
-        
-        private void ClearChineseSignsLowerIfNeeded(object obj)
-        {
-            ChineseSignsLowerBound = null;
-        }
-        
-        private void ClearChineseSignsHigherIfNeeded(object obj)
-        {
-            ChineseSignsHigherBound = null;
-        }
-
-        private void ClearAdultIfNeeded(object obj)
-        {
-            AdultFilterBool = null;
-        }
-        
-        private void ClearBirthdayIfNeeded(object obj)
-        {
-            BirthdayFilterBool = null;
-        }
-
         private void ApplyChanges(ObservableCollection<Person> users)
         {
-            var boundGetters = new List<MethodInfo>();
-            var stringGetters = new List<MethodInfo>();
-            var boolGetters = new List<MethodInfo>();
-            foreach (var getter in _getters)
-            {
-                if (getter.Getter.ReturnType == typeof(string))
-                    stringGetters.Add(getter.Getter);
-                else if (getter.Getter.ReturnType == typeof(bool?))
-                    boolGetters.Add(getter.Getter);
-                else if (getter.Getter.ReturnType == typeof(SunSigns?) ||
-                         getter.Getter.ReturnType == typeof(ChineseSigns?) ||
-                         getter.Getter.ReturnType == typeof(DateTime?))
-                    boundGetters.Add(getter.Getter);
-            }
-
-            var lowerBounds = new List<IComparable> {BirthDateLowerBound, SunSignsLowerBound, ChineseSignsLowerBound};
-            var higherBounds = new List<IComparable>
-            {
-                BirthDateHigherBound, SunSignsHigherBound, ChineseSignsHigherBound
-            };
-            var stringKeys = new List<string> {NameFilterString, SurnameFilterString, EMailFilterString};
-            var boolKeys = new List<bool?> {AdultFilterBool, BirthdayFilterBool};
+            var lowerBounds = new Dictionary<MethodInfo, IComparable>();
+            var higherBounds = new Dictionary<MethodInfo, IComparable>();
+            var containedStrings = new Dictionary<MethodInfo, string>();
+            var predicates = new Dictionary<MethodInfo, bool>();
+            if (NameFilterEnabled)
+                containedStrings[Getters[0].Getter] = NameFilterString;
+            if (SurnameFilterEnabled)
+                containedStrings[Getters[1].Getter] = SurnameFilterString;
+            if (EMailFilterEnabled)
+                containedStrings[Getters[2].Getter] = EMailFilterString;
+            if (BirthDateFilterFromEnabled)
+                lowerBounds[Getters[3].Getter] = BirthDateLowerBound;
+            if (BirthDateFilterToEnabled)
+                higherBounds[Getters[3].Getter] = BirthDateHigherBound;
+            if (SunSignsFilterFromEnabled)
+                lowerBounds[Getters[4].Getter] = SunSignsLowerBound;
+            if (SunSignsFilterToEnabled)
+                higherBounds[Getters[4].Getter] = SunSignsHigherBound;
+            if (ChineseSignsFilterFromEnabled)
+                lowerBounds[Getters[5].Getter] = ChineseSignsLowerBound;
+            if (ChineseSignsFilterToEnabled)
+                higherBounds[Getters[5].Getter] = ChineseSignsHigherBound;
+            if (AdultFilterEnabled)
+                predicates[Getters[6].Getter] = AdultFilterBool;
+            if (BirthdayFilterEnabled)
+                predicates[Getters[7].Getter] = BirthdayFilterBool;
             if (SortingEnabled)
-                Users = SortAndFilter.SortAndFilterUsers(users, boundGetters,
-                    stringGetters, boolGetters, lowerBounds, higherBounds,
-                    stringKeys, boolKeys, Getter.Getter);
-            else Users = SortAndFilter.SortAndFilterUsers(users, boundGetters,
-                stringGetters, boolGetters, lowerBounds, higherBounds,
-                stringKeys, boolKeys);
-            _sortingAndFiltersApplied = true;
+                Users = SortAndFilter.SortAndFilterUsers(users, lowerBounds, higherBounds,
+                    containedStrings, predicates, Getter.Getter);
+            else
+                Users = SortAndFilter.SortAndFilterUsers(users, lowerBounds, higherBounds,
+                    containedStrings, predicates);
+            _filtersOrSortingApplied = true;
         }
 
         private async void ApplyNotifiedChanges()
@@ -658,29 +488,43 @@ namespace Lab04.ViewModels
             await Task.Run(() =>
             {
                 Users = new ObservableCollection<Person>(StationManager.DataStorage.Users);
-                ClearSortIfNeeded(null);
-                ClearNameIfNeeded(null);
-                ClearSurnameIfNeeded(null);
-                ClearEMailIfNeeded(null);
-                ClearBirthDateLowerIfNeeded(null);
-                ClearBirthDateHigherIfNeeded(null);
-                ClearSunSignsLowerIfNeeded(null);
-                ClearSunSignsHigherIfNeeded(null);
-                ClearChineseSignsLowerIfNeeded(null);
-                ClearChineseSignsHigherIfNeeded(null);
-                ClearAdultIfNeeded(null);
-                ClearBirthdayIfNeeded(null);
-                _sortingAndFiltersApplied = false;
+                ClearName();
+                ClearSurname();
+                ClearEMail();
+                Getter = Getters[0];
+                BirthDateLowerBound = DateTime.Now;
+                BirthDateHigherBound = DateTime.Now;
+                SunSignsLowerBound = SunSigns.Capricorn;
+                SunSignsHigherBound = SunSigns.Capricorn;
+                ChineseSignsLowerBound = ChineseSigns.Tiger;
+                ChineseSignsHigherBound = ChineseSigns.Tiger;
+                AdultFilterBool = false;
+                BirthdayFilterBool = false;
+
+                SortingEnabled = false;
+                NameFilterEnabled = false;
+                SurnameFilterEnabled = false;
+                EMailFilterEnabled = false;
+                BirthDateFilterFromEnabled = false;
+                BirthDateFilterToEnabled = false;
+                SunSignsFilterFromEnabled = false;
+                SunSignsFilterToEnabled = false;
+                ChineseSignsFilterFromEnabled = false;
+                ChineseSignsFilterToEnabled = false;
+                AdultFilterEnabled = false;
+                BirthdayFilterEnabled = false;
+                
+                _filtersOrSortingApplied = false;
             });
             LoaderManager.Instance.HideLoader();
         }
 
-        private bool HasFiltersOrSorting()
+        private bool EnabledFiltersEntered()
         {
-            return Getter != null || NameFilterString != null || SurnameFilterString != null ||
-                   EMailFilterString != null || BirthDateLowerBound != null || BirthDateHigherBound != null ||
-                   SunSignsLowerBound != null || SunSignsHigherBound != null || ChineseSignsLowerBound != null ||
-                   ChineseSignsHigherBound != null || AdultFilterBool != null || BirthdayFilterBool != null;
+            return (SortingEnabled && Getter != null || !SortingEnabled) && 
+                   (NameFilterEnabled && NameFilterString != null || !NameFilterEnabled) && 
+                   (SurnameFilterEnabled && SurnameFilterString != null || !SurnameFilterEnabled) &&
+                   (EMailFilterEnabled && EMailFilterString != null || !EMailFilterEnabled);
         }
 
         private bool HasFiltersOrSortingEnabled()
@@ -691,12 +535,6 @@ namespace Lab04.ViewModels
                    AdultFilterEnabled || BirthdayFilterEnabled;
         }
 
-        internal void UpdateIfNeeded()
-        {
-            if (_sortingAndFiltersApplied && CanApplySortingAndFilters())
-                ApplySortingAndFilters(null);
-        }
-
         private void OnUsersChanged(object obj, NotifyCollectionChangedEventArgs e)
         {
             switch(e.Action)
@@ -705,7 +543,7 @@ namespace Lab04.ViewModels
                     
                     var newUser = e.NewItems[0] as Person;
                     Users.Add(newUser);
-                    if (HasFiltersOrSorting())
+                    if (EnabledFiltersEntered())
                     {
                         ApplyNotifiedChanges();
                     }
@@ -715,7 +553,7 @@ namespace Lab04.ViewModels
                     Users.Remove(oldUser);
                     break;
                 default:
-                    if (HasFiltersOrSorting())
+                    if (EnabledFiltersEntered())
                     {
                         ApplyNotifiedChanges();
                     }
@@ -725,6 +563,9 @@ namespace Lab04.ViewModels
 
         public MainViewModel()
         {
+            Getter = Getters[0];
+            BirthDateLowerBound = DateTime.Now;
+            BirthDateHigherBound = DateTime.Now;
             _users = new ObservableCollection<Person>(StationManager.DataStorage.Users);
             StationManager.DataStorage.Users.CollectionChanged += OnUsersChanged;
         }

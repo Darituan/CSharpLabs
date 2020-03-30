@@ -58,8 +58,7 @@
         <CheckBox Grid.Row="3" Grid.Column="1" 
                   IsChecked="{Binding SortingEnabled}"
                   Content="Sort by"
-                  Command="{Binding ClearSortIfNeededCommand}"
-                  ></CheckBox>
+        ></CheckBox>
         <ComboBox Grid.Row="3" Grid.Column="2" IsEnabled="{Binding SortingEnabled, UpdateSourceTrigger=PropertyChanged}"
                   ItemsSource="{Binding Path=Getters, Mode=OneWay}"
                   SelectedItem="{Binding Path=Getter}"
@@ -67,7 +66,6 @@
         <CheckBox Grid.Row="4" Grid.Column="1"
                   IsChecked="{Binding NameFilterEnabled}"
                   Content="Filter by name"
-                  Command="{Binding ClearNameIfNeededCommand}"
         ></CheckBox>
         <TextBox Grid.Row ="4" Grid.Column="2" Width="185" HorizontalAlignment="center"
                  IsEnabled="{Binding NameFilterEnabled, UpdateSourceTrigger=PropertyChanged}"
@@ -75,7 +73,6 @@
         <CheckBox Grid.Row="5" Grid.Column="1"
                   IsChecked="{Binding SurnameFilterEnabled}"
                   Content="Filter by surname"
-                  Command="{Binding ClearSurnameIfNeededCommand}"
         ></CheckBox>
         <TextBox Grid.Row ="5" Grid.Column="2" Width="185" HorizontalAlignment="center"
                  IsEnabled="{Binding SurnameFilterEnabled, UpdateSourceTrigger=PropertyChanged}"
@@ -83,7 +80,6 @@
         <CheckBox Grid.Row="6" Grid.Column="1"
                   IsChecked="{Binding EMailFilterEnabled}"
                   Content="Filter by e-mail"
-                  Command="{Binding ClearEMailIfNeededCommand}"
         ></CheckBox>
         <TextBox Grid.Row ="6" Grid.Column="2" Width="185" HorizontalAlignment="center"
                  IsEnabled="{Binding EMailFilterEnabled, UpdateSourceTrigger=PropertyChanged}"
@@ -93,7 +89,6 @@
         <CheckBox Grid.Row="8" Grid.Column="1"
                   IsChecked="{Binding BirthDateFilterFromEnabled}"
                   Content="from"
-                  Command="{Binding ClearBirthDateLowerIfNeededCommand}"
         ></CheckBox>
         <DatePicker Grid.Row="8" Grid.Column="2"
                     IsEnabled="{Binding BirthDateFilterFromEnabled, UpdateSourceTrigger=PropertyChanged}"
@@ -102,7 +97,6 @@
         <CheckBox Grid.Row="9" Grid.Column="1"
                   IsChecked="{Binding BirthDateFilterToEnabled}"
                   Content="to"
-                  Command="{Binding ClearBirthDateHigherIfNeededCommand}"
         ></CheckBox>
         <DatePicker Grid.Row="9" Grid.Column="2"
                     IsEnabled="{Binding BirthDateFilterToEnabled, UpdateSourceTrigger=PropertyChanged}"
@@ -113,7 +107,6 @@
         <CheckBox Grid.Row="11" Grid.Column="1"
                   IsChecked="{Binding SunSignsFilterFromEnabled}"
                   Content="from"
-                  Command="{Binding ClearSunSignsLowerIfNeededCommand}"
         ></CheckBox>
         <ComboBox Grid.Row="11" Grid.Column="2" 
                   IsEnabled="{Binding SunSignsFilterFromEnabled, UpdateSourceTrigger=PropertyChanged}"
@@ -124,7 +117,6 @@
         <CheckBox Grid.Row="12" Grid.Column="1"
                   IsChecked="{Binding SunSignsFilterToEnabled}"
                   Content="to"
-                  Command="{Binding ClearSunSignsHigherIfNeededCommand}"
         ></CheckBox>
         <ComboBox Grid.Row="12" Grid.Column="2" 
                   IsEnabled="{Binding SunSignsFilterToEnabled, UpdateSourceTrigger=PropertyChanged}"
@@ -137,7 +129,6 @@
         <CheckBox Grid.Row="14" Grid.Column="1"
                   IsChecked="{Binding ChineseSignsFilterFromEnabled}"
                   Content="from"
-                  Command="{Binding ClearChineseSignsLowerIfNeededCommand}"
         ></CheckBox>
         <ComboBox Grid.Row="14" Grid.Column="2" 
                   IsEnabled="{Binding ChineseSignsFilterFromEnabled, UpdateSourceTrigger=PropertyChanged}"
@@ -148,7 +139,6 @@
         <CheckBox Grid.Row="15" Grid.Column="1"
                   IsChecked="{Binding ChineseSignsFilterToEnabled}"
                   Content="to"
-                  Command="{Binding ClearChineseSignsHigherIfNeededCommand}"
         ></CheckBox>
         <ComboBox Grid.Row="15" Grid.Column="2" 
                   IsEnabled="{Binding ChineseSignsFilterToEnabled, UpdateSourceTrigger=PropertyChanged}"
@@ -159,7 +149,6 @@
         <CheckBox Grid.Row="16" Grid.Column="1"
                   IsChecked="{Binding AdultFilterEnabled}"
                   Content="Filter by being adult"
-                  Command="{Binding ClearAdultIfNeededCommand}"
         ></CheckBox>
         <CheckBox Grid.Row="16" Grid.Column="2"
                   IsEnabled="{Binding AdultFilterEnabled, UpdateSourceTrigger=PropertyChanged}"
@@ -169,7 +158,6 @@
         <CheckBox Grid.Row="17" Grid.Column="1"
                   IsChecked="{Binding BirthdayFilterEnabled}"
                   Content="Filter by having birthday"
-                  Command="{Binding ClearBirthdayIfNeededCommand}"
         ></CheckBox>
         <CheckBox Grid.Row="17" Grid.Column="2"
                   IsEnabled="{Binding BirthdayFilterEnabled, UpdateSourceTrigger=PropertyChanged}"

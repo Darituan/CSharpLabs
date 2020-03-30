@@ -10,60 +10,56 @@ namespace Lab04.Tools.SortAndFilter
     internal static class SortAndFilter
     {
         internal static ObservableCollection<Person> SortAndFilterUsers(IEnumerable<Person> users,
-            List<MethodInfo> boundFilterGetters, List<MethodInfo> stringFilterGetters, 
-            List<MethodInfo> boolFilterGetters, List<IComparable> lowerBounds, List<IComparable> higherBounds,
-            List<string> stringKeys, List<bool?> boolKeys, MethodInfo sortGetter)
+            Dictionary<MethodInfo, IComparable> lowerBounds, 
+            Dictionary<MethodInfo, IComparable> higherBounds, Dictionary<MethodInfo, string> containedStrings,
+            Dictionary<MethodInfo, bool> predicates, MethodInfo sortGetter)
         {
             var sortedAndFiltered = from user in users
-                where Match(user, boundFilterGetters, stringFilterGetters, boolFilterGetters, lowerBounds, higherBounds,
-                    stringKeys, boolKeys)
+                where Match(user, lowerBounds, higherBounds, containedStrings, predicates)
                 orderby sortGetter.Invoke(user, null)
                 select user;
             return new ObservableCollection<Person>(sortedAndFiltered);
         }
         
         internal static ObservableCollection<Person> SortAndFilterUsers(IEnumerable<Person> users,
-            List<MethodInfo> boundFilterGetters, List<MethodInfo> stringFilterGetters, 
-            List<MethodInfo> boolFilterGetters, List<IComparable> lowerBounds, List<IComparable> higherBounds,
-            List<string> stringKeys, List<bool?> boolKeys)
+            Dictionary<MethodInfo, IComparable> lowerBounds, 
+            Dictionary<MethodInfo, IComparable> higherBounds, Dictionary<MethodInfo, string> containedStrings,
+            Dictionary<MethodInfo, bool> predicates)
         {
             var sortedAndFiltered = from user in users
-                where Match(user, boundFilterGetters, stringFilterGetters, boolFilterGetters, lowerBounds, higherBounds,
-                    stringKeys, boolKeys)
+                where Match(user, lowerBounds, higherBounds, containedStrings, predicates)
                 select user;
             return new ObservableCollection<Person>(sortedAndFiltered);
         }
 
-        private static bool Match(Person user, List<MethodInfo> boundFilterGetters, 
-            List<MethodInfo> stringFilterGetters, List<MethodInfo> boolFilterGetters, List<IComparable> lowerBounds, 
-            List<IComparable> higherBounds, List<string> stringKeys, List<bool?> boolKeys)
+        private static bool Match(Person user, Dictionary<MethodInfo, IComparable> lowerBounds, 
+            Dictionary<MethodInfo, IComparable> higherBounds, Dictionary<MethodInfo, string> containedStrings,
+            Dictionary<MethodInfo, bool> predicates)
         {
-            var len = boundFilterGetters.Count;
-            for (var i = 0; i < len; ++i)
+            foreach (var (key, value) in lowerBounds)
             {
-                if (boundFilterGetters[i].Invoke(user, null) is IComparable filterPropertyValue && 
-                    (lowerBounds[i] != null && 
-                    filterPropertyValue.CompareTo(lowerBounds[i]) < 0 ||
-                     higherBounds[i] != null && filterPropertyValue.CompareTo(higherBounds[i]) > 0))
+                if ((key.Invoke(user, null) as IComparable)?.CompareTo(value) < 0)
+                    return false;
+            }
+            
+            foreach (var (key, value) in higherBounds)
+            {
+                if ((key.Invoke(user, null) as IComparable)?.CompareTo(value) > 0)
+                    return false;
+            }
+            
+            foreach (var (key, value) in containedStrings)
+            {
+                if (key.Invoke(user, null) is string propertyValue && !value.Contains(propertyValue))
+                    return false;
+            }
+            
+            foreach (var (key, value) in predicates)
+            {
+                if (key.Invoke(user, null) is bool propertyValue && value != propertyValue)
                     return false;
             }
 
-            len = stringFilterGetters.Count;
-            for (var i = 0; i < len; ++i)
-            {
-                if (stringFilterGetters[i].Invoke(user, null) is string filterPropertyValue && 
-                    stringKeys[i] != null && ! filterPropertyValue.Contains(stringKeys[i]))
-                    return false;
-            }
-            
-            len = boolFilterGetters.Count;
-            for (var i = 0; i < len; ++i)
-            {
-                if (boolFilterGetters[i].Invoke(user, null) is bool filterPropertyValue && 
-                    boolKeys[i] != null && ! (bool?) filterPropertyValue == boolKeys[i])
-                    return false;
-            }
-            
             return true;
         }
     }
