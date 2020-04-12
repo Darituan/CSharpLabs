@@ -1,6 +1,10 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using System.Windows;
 using System.Windows.Threading;
 using Lab05.ViewModels;
 
@@ -8,60 +12,147 @@ namespace Lab05.Tools.Managers
 {
     internal static class UpdateManager
     {
+        internal static Thread CollectionUpdater;
+        internal static Thread MetaUpdater;
+        internal static bool Stop = false;
         internal static readonly object Locker = new object();
         private static void UpdateCollection()
         {
-            while (true)
+            while (!Stop)
             {
-                Thread.Sleep(4000);
+                Thread.Sleep(2000);
+                
                 lock (Locker)
                 {
                     var allProcArr = Process.GetProcesses();
-                    var allProc = from process in allProcArr 
-                        select new ProcessViewModel(process);
-                    var processViewModels = allProc as ProcessViewModel[] ?? allProc.ToArray();
-                    var toBeDeleted = ProcessManager.ProcessesInfo.Processes.Except(processViewModels);
-                    var toBeAdded = processViewModels.Except(ProcessManager.ProcessesInfo.Processes);
-                    Dispatcher.CurrentDispatcher.Invoke(() =>
+                    var allProc = new List<ProcessViewModel>();
+                    foreach (var process in allProcArr)
                     {
-                        foreach (var process in toBeDeleted)
+                        try
                         {
-                            ProcessManager.ProcessesInfo.Processes.Remove(process);
+                            var processViewModel = new ProcessViewModel(process);
+                            allProc.Add(processViewModel);
                         }
-                        foreach (var process in toBeAdded)
+                        catch (Exception e)
                         {
-                            ProcessManager.ProcessesInfo.Processes.Add(process);
                         }
-                    });
+                    }
+                    
+                    var toBeDeleted = new List<ProcessViewModel>();
+                    var check = "";
+                    foreach (var process in ProcessesManager.ProcessesInfo.Processes)
+                    {
+                        try
+                        {
+                            check = process.Process.ProcessName;
+                        }
+                        catch (Exception e)
+                        {
+                            toBeDeleted.Add(process);
+                        }
+                    }
+                    
+                    var toBeAdded = new List<ProcessViewModel>();
+                    foreach (var process in allProc)
+                    {
+                        var add = true;
+                        foreach (var oldProcess in ProcessesManager.ProcessesInfo.Processes)
+                        {
+                            if (process.Id == oldProcess.Id)
+                                add = false;
+                        }
+                        if (add) toBeAdded.Add(process);
+                    }
+
+                    try
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            
+                            foreach (var process in toBeDeleted)
+                            {
+                                ProcessesManager.ProcessesInfo.Processes.Remove(process);
+                            }
+                            
+                            foreach (var process in toBeAdded)
+                            {
+                                ProcessesManager.ProcessesInfo.Processes.Add(process);
+                            }
+                            
+                        });
+                    }
+                    catch (Exception e)
+                    {
+                    }
                 }
             }
         }
 
         private static void UpdateMeta()
         {
-            while (true)
+            ProcessesManager.ProcessesInfo.Processes.CollectionChanged +=
+                (sender, args) => Console.WriteLine(args.Action);
+            while (!Stop)
             {
-                Thread.Sleep(1500);
+                Thread.Sleep(500);
                 lock (Locker)
                 {
-                    foreach (var process in ProcessManager.ProcessesInfo.Processes)
+                    var exited = new List<ProcessViewModel>();
+                    foreach (var process in ProcessesManager.ProcessesInfo.Processes)
                     {
-                        process.Refresh();
+                        try
+                        {
+                            process.Refresh();
+                        }
+                        catch (Exception e)
+                        {
+                            exited.Add(process);
+                        }
                     }
 
-                    Dispatcher.CurrentDispatcher.Invoke(() =>
+                    try
                     {
-                        ProcessManager.ProcessesInfo.Processes[0].RefreshAndNotify();
-                        ProcessManager.ProcessesInfo.UpdateCurrent();
-                    });
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            try
+                            {
+                                ProcessesManager.ProcessesInfo.Processes[0].RefreshAndNotify();
+                            }
+                            catch (Exception e)
+                            {
+                                exited.Add(ProcessesManager.ProcessesInfo.Processes[0]);
+                            }
+                            try
+                            {
+                                ProcessesManager.ProcessesInfo.CurrentProcess.RefreshAndNotify();
+                                ProcessesManager.ProcessesInfo.UpdateCurrent();
+                            }
+                            catch (Exception e)
+                            {
+                                exited.Add(ProcessesManager.ProcessesInfo.CurrentProcess);
+                                ProcessesManager.ProcessesInfo.CurrentProcess = null;
+                            }
+
+                            foreach (var process in exited)
+                            {
+                                ProcessesManager.ProcessesInfo.Processes.Remove(process);
+                            }
+                        
+                        });
+                    }
+                    catch (Exception e)
+                    {
+                    }
                 }
             }
         }
 
         internal static void Initialize()
         {
-            new Thread(UpdateCollection).Start();
-            new Thread(UpdateMeta).Start();
+            CollectionUpdater = new Thread(UpdateCollection);
+            MetaUpdater = new Thread(UpdateMeta);
+            CollectionUpdater.Start();
+            MetaUpdater.Start();
         }
     }
 }

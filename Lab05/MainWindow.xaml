@@ -3,10 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Lab05"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
+        Title="MainWindow" Height="600" Width="975">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding CloseCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid >
+        <ContentControl Content="{Binding Content, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsControlEnabled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"></ContentControl>
+        <fa:ImageAwesome Icon="Refresh" Width="50" Height="50" Spin="True" Visibility="{Binding LoaderVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"></fa:ImageAwesome>
     </Grid>
 </Window>

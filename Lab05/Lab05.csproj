@@ -6,8 +6,13 @@
         <UseWPF>true</UseWPF>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <PlatformTarget>x64</PlatformTarget>
+    </PropertyGroup>
+
     <ItemGroup>
-      <Folder Include="Views" />
+      <PackageReference Include="Blend.Interctivity.WPF.v4.0" Version="1.0.3" />
+      <PackageReference Include="FontAwesome.WPF" Version="4.7.0.9" />
     </ItemGroup>
 
 </Project>

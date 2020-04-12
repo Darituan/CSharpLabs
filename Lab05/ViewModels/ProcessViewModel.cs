@@ -5,13 +5,17 @@ using Lab05.Tools;
 
 namespace Lab05.ViewModels
 {
-    public class ProcessViewModel: BaseViewModel, IComparable
+    public class ProcessViewModel: BaseViewModel
     {
         private readonly Process _process;
-        
-        private readonly PerformanceCounter _performanceCounter = new PerformanceCounter();
+
+        private PerformanceCounter _performanceCounter;
         
         private static readonly long TotalMemory = PerformanceInfo.GetTotalMemory();
+
+        private string _startUserName;
+        
+        private string _startFileName;
 
         private double _cpuUsagePercentage;
         
@@ -35,11 +39,21 @@ namespace Lab05.ViewModels
 
         public int ThreadCount => _process.Threads.Count;
 
-        public string StartUserName => _process.StartInfo.UserName;
+        public string StartUserName => _startUserName;
         
-        public string StartFileName => _process.StartInfo.FileName;
+        public string StartFileName => _startFileName;
         
         public DateTime StartTime => _process.StartTime;
+
+        private string GetStartUserName()
+        {
+            return ProcessTools.GetUsernameBySessionId(_process.SessionId, true);
+        }
+
+        private string GetStartFileName()
+        {
+            return _process.GetMainModuleFileName();
+        }
 
         private double GetCpuUsagePercentage()
         {
@@ -61,6 +75,8 @@ namespace Lab05.ViewModels
             _cpuUsagePercentage = GetCpuUsagePercentage();
             _memoryUsagePercentage = GetMemoryUsagePercentage();
             _memoryUsage = GetMemoryUsage();
+            _startFileName = GetStartFileName();
+            _startUserName = GetStartUserName();
         }
 
         internal void Refresh()
@@ -79,13 +95,8 @@ namespace Lab05.ViewModels
         internal ProcessViewModel(Process process)
         {
             _process = process;
+            _performanceCounter = new PerformanceCounter("Process", "% Processor Time", _process.ProcessName, true);
             Update();
-        }
-
-        public int CompareTo(object obj)
-        {
-            var p = obj as ProcessViewModel;
-            return Id.CompareTo(p?.Id);
         }
     }
 }

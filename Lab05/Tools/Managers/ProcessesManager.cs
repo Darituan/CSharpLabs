@@ -1,6 +1,6 @@
 ﻿namespace Lab05.Tools.Managers
 {
-    internal static class ProcessManager
+    internal static class ProcessesManager
     {
         private static ProcessesInfo _processesInfo;
 

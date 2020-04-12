@@ -12,6 +12,7 @@ namespace Lab05.ViewModels
         private Visibility _loaderVisibility = Visibility.Hidden;
         private bool _isControlEnabled = true;
         private INavigatable _content;
+        private RelayCommand<object> _closeCommand;
         #endregion
 
         #region Properties
@@ -43,12 +44,27 @@ namespace Lab05.ViewModels
             }
         } 
         
+        public RelayCommand<object> CloseCommand
+        {
+            get
+            {
+                return _closeCommand ??= new RelayCommand<object>(
+                    Close, o => CanClose());
+            }
+        }
         #endregion
-        
+
+        private bool CanClose() => true;
+
+        private void Close(object obj)
+        {
+            UpdateManager.Stop = true;
+        }
+
 
         internal MainWindowViewModel()
         {
-            ProcessManager.Initialize();
+            ProcessesManager.Initialize();
             UpdateManager.Initialize();
             LoaderManager.Instance.Initialize(this);
             NavigationManager.Instance.Initialize(new ZodiacDeterminantNavigationModel(this));

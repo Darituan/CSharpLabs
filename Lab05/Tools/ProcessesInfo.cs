@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -22,13 +23,21 @@ namespace Lab05.Tools
         public ObservableCollection<ProcessViewModel> Processes
         {
             get => _processes;
-            set => _processes = value;
+            set
+            {
+                _processes = value;
+                OnPropertyChanged();
+            }
         }
 
         public ProcessViewModel CurrentProcess
         {
             get => _currentProcess;
-            set => _currentProcess = value;
+            set
+            {
+                _currentProcess = value;
+                OnPropertyChanged();
+            }
         }
 
         public ObservableCollection<ProcessThread> CurrentThreads
@@ -70,7 +79,14 @@ namespace Lab05.Tools
             _processes = new ObservableCollection<ProcessViewModel>();
             foreach (var process in allProc)
             {
-                _processes.Add(new ProcessViewModel(process));
+                try
+                {
+                    var processViewModel = new ProcessViewModel(process);
+                    _processes.Add(processViewModel);
+                }
+                catch (Exception e)
+                {
+                }
             }
         }
         

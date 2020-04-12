@@ -1,4 +1,6 @@
 ﻿using System;
+using Lab05.Views;
+
 //using Lab05.Views;
 
 
@@ -16,13 +18,13 @@ namespace Lab05.Tools.Navigation
             switch (viewType)
             {
                 case ViewType.Threads:
-                    //AddView(ViewType.Threads, new ThreadsView());
+                    AddView(ViewType.Threads, new ThreadView());
                     break;
                 case ViewType.Modules:
-                    //AddView(ViewType.Modules, new ModulesView());
+                    AddView(ViewType.Modules, new ModuleView());
                     break;
                 case ViewType.Main:
-                    //AddView(ViewType.Main, new MainView());
+                    AddView(ViewType.Main, new MainView());
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(viewType), viewType, null);
