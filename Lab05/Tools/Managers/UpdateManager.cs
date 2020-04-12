@@ -15,13 +15,15 @@ namespace Lab05.Tools.Managers
         internal static Thread CollectionUpdater;
         internal static Thread MetaUpdater;
         internal static bool Stop = false;
+        internal static bool UpdatingCollection;
+        internal static bool UpdatingMeta;
         internal static readonly object Locker = new object();
         private static void UpdateCollection()
         {
             while (!Stop)
             {
                 Thread.Sleep(2000);
-                
+                UpdatingCollection = true;
                 lock (Locker)
                 {
                     var allProcArr = Process.GetProcesses();
@@ -85,16 +87,18 @@ namespace Lab05.Tools.Managers
                     {
                     }
                 }
+                UpdatingCollection = false;
             }
         }
 
         private static void UpdateMeta()
         {
-            ProcessesManager.ProcessesInfo.Processes.CollectionChanged +=
-                (sender, args) => Console.WriteLine(args.Action);
+            //ProcessesManager.ProcessesInfo.Processes.CollectionChanged +=
+            //    (sender, args) => Console.WriteLine(args.Action);
             while (!Stop)
             {
                 Thread.Sleep(500);
+                UpdatingMeta = true;
                 lock (Locker)
                 {
                     var exited = new List<ProcessViewModel>();
@@ -144,6 +148,7 @@ namespace Lab05.Tools.Managers
                     {
                     }
                 }
+                UpdatingMeta = false;
             }
         }
 

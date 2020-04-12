@@ -10,7 +10,7 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="500"></RowDefinition>
         </Grid.RowDefinitions>
-        <Button Command="{Binding ReturnCommand}"></Button>
+        <Button Command="{Binding ReturnCommand}">Return</Button>
         <DataGrid Grid.Row="1"
                   ScrollViewer.CanContentScroll="True"
                   ItemsSource="{Binding Modules, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"

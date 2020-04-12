@@ -20,7 +20,7 @@ namespace Lab05.ViewModels
             }
         }
         
-        public RelayCommand<object> DeletePersonCommand
+        public RelayCommand<object> ReturnCommand
         {
             get
             {
