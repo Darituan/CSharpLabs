@@ -5,7 +5,7 @@ using Lab05.Tools;
 
 namespace Lab05.ViewModels
 {
-    public class ProcessViewModel: BaseViewModel
+    public class ProcessViewModel: BaseViewModel, IComparable
     {
         private readonly Process _process;
         
@@ -80,6 +80,12 @@ namespace Lab05.ViewModels
         {
             _process = process;
             Update();
+        }
+
+        public int CompareTo(object obj)
+        {
+            var p = obj as ProcessViewModel;
+            return Id.CompareTo(p?.Id);
         }
     }
 }
