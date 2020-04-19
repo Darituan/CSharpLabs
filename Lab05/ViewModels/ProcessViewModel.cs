@@ -89,13 +89,16 @@ namespace Lab05.ViewModels
         {
             _process.Refresh();
             Update();
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(CpuUsagePercentage));
+            OnPropertyChanged(nameof(MemoryUsagePercentage));
+            OnPropertyChanged(nameof(MemoryUsage));
         }
 
         internal ProcessViewModel(Process process)
         {
             _process = process;
             _performanceCounter = new PerformanceCounter("Process", "% Processor Time", _process.ProcessName, true);
+            _performanceCounter.NextValue();
             Update();
         }
     }

@@ -100,7 +100,7 @@ namespace Lab05.ViewModels
 
         private bool CanKill()
         {
-            return CurrentProcess != null && !UpdateManager.UpdatingCollection && !UpdateManager.UpdatingMeta;
+            return CurrentProcess != null;
         }
         
         private bool CanShow()
@@ -120,7 +120,7 @@ namespace Lab05.ViewModels
         
         private bool CanSort()
         {
-            return Getter != null && !UpdateManager.UpdatingCollection && !UpdateManager.UpdatingMeta;
+            return Getter != null;
         }
 
         private async void Sort(object o)
@@ -134,7 +134,6 @@ namespace Lab05.ViewModels
         private void Kill(object o)
         {
             CurrentProcess.Process.Kill();
-            Processes.Remove(CurrentProcess);
             CurrentProcess = null;
         }
 

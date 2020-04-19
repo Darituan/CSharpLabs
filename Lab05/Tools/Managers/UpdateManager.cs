@@ -106,7 +106,7 @@ namespace Lab05.Tools.Managers
                     {
                         try
                         {
-                            process.Refresh();
+                            process.RefreshAndNotify();
                         }
                         catch (Exception e)
                         {
@@ -120,20 +120,10 @@ namespace Lab05.Tools.Managers
                         {
                             try
                             {
-                                ProcessesManager.ProcessesInfo.Processes[0].RefreshAndNotify();
-                            }
-                            catch (Exception e)
-                            {
-                                exited.Add(ProcessesManager.ProcessesInfo.Processes[0]);
-                            }
-                            try
-                            {
-                                ProcessesManager.ProcessesInfo.CurrentProcess.RefreshAndNotify();
                                 ProcessesManager.ProcessesInfo.UpdateCurrent();
                             }
                             catch (Exception e)
                             {
-                                exited.Add(ProcessesManager.ProcessesInfo.CurrentProcess);
                                 ProcessesManager.ProcessesInfo.CurrentProcess = null;
                             }
 
