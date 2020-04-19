@@ -71,6 +71,11 @@ namespace Lab05.Tools
                 CurrentModules = new ObservableCollection<ProcessModule>(
                     from object? module in modules select module as ProcessModule);
             }
+            else
+            {
+                CurrentThreads = null;
+                CurrentModules = null;
+            }
         }
 
         internal ProcessesInfo()

@@ -1,5 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using Lab05.Tools;
 using Lab05.Tools.Managers;
@@ -127,24 +129,31 @@ namespace Lab05.ViewModels
         {
             await Task.Run((() =>
             {
+                while(UpdateManager.UpdatingCollection || UpdateManager.UpdatingMeta)
+                    Thread.Sleep(50);
                 Processes = Sorter.SortProcesses(Processes, Getter.Getter);
             }));
         }
 
-        private void Kill(object o)
+        private async void Kill(object o)
         {
-            CurrentProcess.Process.Kill();
-            CurrentProcess = null;
+            await Task.Run((() =>
+            {
+                while(UpdateManager.UpdatingCollection || UpdateManager.UpdatingMeta)
+                    Thread.Sleep(50);
+                if (CurrentProcess != null)
+                {
+                    CurrentProcess.Process.Kill();
+                    CurrentProcess = null;
+                }
+            }));
         }
 
         private void Show(object o)
         {
-            var startInfo = new ProcessStartInfo()
-            {
-                Arguments = CurrentProcess.StartFileName,
-                FileName = "explorer.exe"
-            };
-            Process.Start(startInfo);
+            Process.Start("explorer.exe",
+                CurrentProcess.StartFileName.Substring(0,
+                    CurrentProcess.StartFileName.LastIndexOf("\\", StringComparison.Ordinal)));
         }
 
         private void ShowModules(object o)

@@ -10,7 +10,7 @@ namespace Lab05.ViewModels
     {
         private RelayCommand<object> _returnCommand;
         
-        public ObservableCollection<ProcessModule> Threads
+        public ObservableCollection<ProcessModule> Modules
         {
             get => ProcessesManager.ProcessesInfo.CurrentModules;
             set
